@@ -9,25 +9,20 @@
   <!-- Academic Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --sust-navy: #0A2647;
       --sust-blue: #003366;
       --sust-gold: #D4AF37;
-      --light: #f8f9fa;
       --border: #cbd5e1;
       --shadow: 0 12px 35px rgba(10, 38, 71, 0.12);
       --success: #2d6a4f;
       --error: #9B1D41;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -36,370 +31,165 @@
       line-height: 1.6;
       color: #333;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .container {
+    /* === Main Container & Page Visibility === */
+    .hidden {
+      display: none !important;
+    }
+    
+    .page-container {
       max-width: 800px;
       width: 100%;
-      margin: 1.5rem auto; /* Adjusted margin for better mobile view */
+      margin: auto;
       background: white;
       border-radius: 1.25rem;
       overflow: hidden;
       box-shadow: var(--shadow);
-      transition: all 0.4s ease;
     }
-
-    .container:hover {
-      box-shadow: 0 25px 60px rgba(10, 38, 71, 0.18);
-      transform: translateY(-0.375rem);
-    }
-
+    
+    /* === Shared Header === */
     .header {
-      text-align: center;
-    }
-
-    .logo-section {
-      padding: 2rem 1.25rem 0.625rem;
-    }
-
-    .header-logo {
-      width: 90px; /* Slightly smaller logo for mobile */
-      height: auto;
-    }
-
-    .text-section {
-      padding: 0.625rem 1.25rem 2.5rem;
-      color: var(--sust-navy);
-    }
-
-    .title {
-      font-family: 'EB Garamond', Georgia, serif;
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.05rem;
-    }
-
-    .subtitle {
-      font-size: 1.125rem;
-      opacity: 0.95;
-      font-weight: 400;
-      letter-spacing: 0.03125rem;
-    }
-
-    main {
-      padding: 2.5rem 1.5rem; /* Adjusted horizontal padding */
-    }
-
-    h3 {
-      font-family: 'EB Garamond', serif;
-      font-size: 1.5rem;
-      color: var(--sust-navy);
-      text-align: center;
-      margin-bottom: 2.1875rem;
-      font-weight: 600;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.375rem;
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #2d3748;
-      font-size: 0.9375rem;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 1rem 1.125rem;
-      border: 2px solid var(--border);
-      border-radius: 0.75rem;
-      font-size: 0.9375rem;
-      background: #fdfdfd;
-      transition: all 0.3s ease;
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--sust-gold);
-      box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15);
-      background: white;
-    }
-
-    .field-group {
-      padding: 1.5625rem;
-      background: #f9fbfc;
-      border-radius: 0.875rem;
-      border: 1.5px dashed var(--border);
-      margin-top: 1.5625rem;
-      opacity: 0;
-      max-height: 0;
-      overflow: hidden;
-      transition: all 0.5s ease-in-out;
-      visibility: hidden;
-    }
-
-    .field-group.visible {
-      opacity: 1;
-      max-height: 500px;
-      transform: translateY(0);
-      border-style: solid;
-      border-color: var(--sust-gold);
-      background: #fefef9;
-      visibility: visible;
-    }
-
-    button {
-      width: 100%;
-      background: var(--sust-blue);
-      color: white;
-      padding: 1.125rem;
-      border: none;
-      border-radius: 0.75rem;
-      font-size: 1.0625rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 2.1875rem;
-      letter-spacing: 0.025rem;
-    }
-
-    button:hover {
-      background: #002b55;
-      transform: translateY(-0.1875rem);
-      box-shadow: 0 0.625rem 1.875rem rgba(0, 51, 102, 0.3);
-    }
-
-    #status {
-      margin-top: 1.5625rem;
-      text-align: center;
-      font-weight: 500;
-      padding: 0.875rem;
-      border-radius: 0.625rem;
-      min-height: 3.5rem;
-      transition: all 0.3s;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #e2e8f0;
+      background-color: #fdfdfd;
     }
+    .header-logo { width: 60px; height: auto; flex-shrink: 0; }
+    .header-text { text-align: right; color: var(--sust-navy); }
+    .header-text h1 { font-family: 'EB Garamond', Georgia, serif; font-size: 1.5rem; font-weight: 600; margin: 0; }
+    .header-text p { font-size: 0.9rem; opacity: 0.9; margin: 0; }
 
-    .converter {
-      margin-top: 2.8125rem;
-      text-align: center;
-      padding: 1.875rem;
-      background: #f0f4f8;
-      border-radius: 0.875rem;
-      border: 1px solid #d0d7e0;
-    }
 
-    .converter p {
-      margin: 0 0 1rem 0;
-      font-size: 1rem;
-      color: #444;
-      font-weight: 500;
-    }
+    /* === Landing Page Styles === */
+    .landing-main { text-align: center; padding: 4rem 2rem; }
+    .landing-main h2 { font-family: 'EB Garamond', serif; font-size: 2.25rem; color: var(--sust-navy); margin-bottom: 1rem; }
+    .landing-main p { font-size: 1.125rem; color: #4a5568; max-width: 600px; margin: 0 auto 3rem auto; }
+    .selection-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    .selection-box { cursor: pointer; display: block; padding: 2rem; background-color: #f8fafc; border: 2px solid var(--border); border-radius: 0.75rem; text-decoration: none; color: var(--sust-blue); transition: all 0.3s ease; }
+    .selection-box:hover { border-color: var(--sust-gold); transform: translateY(-5px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15); background-color: #fff; }
+    .selection-box h3 { font-family: 'EB Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .selection-box span { font-size: 1rem; color: #4a5568; }
 
-    .converter a {
-      text-decoration: none;
-    }
 
-    .converter button {
-      width: auto;
-      padding: 0.75rem 2rem;
-      background: #28a745;
-      font-size: 0.9375rem;
-      margin: 0;
-      box-shadow: 0 0.25rem 0.9375rem rgba(40, 167, 69, 0.3);
-    }
+    /* === Generator Page Styles === */
+    .generator-main { padding: 2.5rem 1.5rem; }
+    .generator-main h3 { font-family: 'EB Garamond', serif; font-size: 1.75rem; color: var(--sust-navy); text-align: center; margin-bottom: 2.5rem; font-weight: 600; }
+    .form-grid { display: grid; grid-template-columns: 1fr; gap: 1.375rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2d3748; font-size: 0.9375rem; }
+    input, select { width: 100%; padding: 1rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 0.9375rem; background: #fdfdfd; transition: all 0.3s ease; }
+    select:disabled { background-color: #e9ecef; opacity: 0.8; cursor: not-allowed; }
+    input:focus, select:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
+    .field-group { padding: 1.5625rem; background: #f9fbfc; border-radius: 0.875rem; border: 1.5px dashed var(--border); margin-top: 1.5625rem; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; visibility: hidden; }
+    .field-group.visible { opacity: 1; max-height: 500px; border-style: solid; border-color: var(--sust-gold); background: #fefef9; visibility: visible; }
+    button { width: 100%; background: var(--sust-blue); color: white; padding: 1.125rem; border: none; border-radius: 0.75rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 2.1875rem; }
+    button:hover:not(:disabled) { background: #002b55; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 51, 102, 0.3); }
+    #status { margin-top: 1.5rem; text-align: center; font-weight: 500; padding: 0.875rem; border-radius: 0.625rem; min-height: 3.5rem; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
+    .converter { margin-top: 2.8rem; text-align: center; padding: 1.875rem; background: #f0f4f8; border-radius: 0.875rem; border: 1px solid #d0d7e0; }
+    
+    /* === Shared Footer === */
+    .page-footer { text-align: center; padding: 2rem 1rem; color: #64748b; font-size: 0.875rem; }
+    .page-footer a { color: var(--sust-blue); text-decoration: none; font-weight: 500; }
+    .page-footer a:hover { text-decoration: underline; }
+    #backButton { cursor: pointer; }
 
-    .converter button:hover {
-      background: #218838;
-      transform: translateY(-0.125rem);
-    }
 
-    .page-footer {
-      text-align: center;
-      padding: 2.1875rem;
-      background: var(--sust-navy);
-      color: #cbd5e1;
-      font-size: 0.875rem;
-      border-bottom-left-radius: 1.25rem;
-      border-bottom-right-radius: 1.25rem;
-    }
-
-    .page-footer a {
-      color: var(--sust-gold);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .page-footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* ===== NEW: STYLES FOR VERY SMALL MOBILE SCREENS ===== */
+    /* === Responsive Adjustments === */
     @media (max-width: 480px) {
-      body {
-        padding: 0.5rem; /* Reduce body padding */
-      }
-      .container {
-        margin: 0.5rem auto; /* Reduce container margin */
-        border-radius: 1rem;
-      }
-      .title {
-        font-size: 1.8rem; /* Slightly smaller title */
-      }
-      .subtitle {
-          font-size: 1rem;
-      }
-      main {
-        padding: 2rem 1rem; /* Less horizontal padding */
-      }
-      .text-section {
-          padding-bottom: 2rem;
-      }
+        body { padding: 0.5rem; }
+        .header { padding: 1rem 1.5rem; }
+        .header-logo { width: 50px; }
+        .header-text h1 { font-size: 1.2rem; }
+        .header-text p { font-size: 0.8rem; }
+        .landing-main { padding: 2.5rem 1rem; }
+        .generator-main { padding: 2rem 1rem; }
     }
-
-    /* Tablet Styles */
     @media (min-width: 768px) {
-      .form-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .header-logo {
-        width: 100px; /* Restore logo size */
-      }
-
-      main {
-        padding: 3.4375rem 4.375rem;
-      }
-
-      .text-section {
-        padding-left: 3.75rem;
-        padding-right: 3.75rem;
-      }
-
-      .title {
-        font-size: 2.375rem; /* Restore title size */
-      }
-       .subtitle {
-          font-size: 1.125rem;
-      }
+      .selection-grid { grid-template-columns: 1fr 1fr; }
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .header-logo { width: 70px; }
+      .header-text h1 { font-size: 1.75rem; }
+      .generator-main { padding: 3.4375rem 4.375rem; }
     }
-
-    /* Desktop Styles */
-    @media (min-width: 1024px) {
-      .container {
-        margin: 2.5rem auto;
-      }
-    }
-
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <!-- Landing Page Section -->
+  <div id="landingPage" class="page-container">
     <header class="header">
-      <div class="logo-section">
-        <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
-      </div>
-      <div class="text-section">
-        <h1 class="title">SUST Cover Page Generator</h1>
-        <p class="subtitle">Shahjalal University of Science and Technology, Sylhet</p>
+      <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
+      <div class="header-text">
+        <h1>Shahjalal University of Science & Technology</h1>
+        <p>Sylhet-3114, Bangladesh</p>
       </div>
     </header>
+    <main class="landing-main">
+      <h2>Cover Page Generator</h2>
+      <p>Please choose the type of cover page you would like to create. Your selection will take you to a form to enter your details.</p>
+      <div class="selection-grid">
+        <div class="selection-box" data-choice="lab">
+          <h3>Lab Report</h3>
+          <span>For practical courses and lab experiments.</span>
+        </div>
+        <div class="selection-box" data-choice="assignment">
+          <h3>Assignment</h3>
+          <span>For theoretical courses and general assignments.</span>
+        </div>
+      </div>
+    </main>
+  </div>
 
-    <main>
+  <!-- Generator Page Section (Initially Hidden) -->
+  <div id="generatorPage" class="page-container hidden">
+    <header class="header">
+      <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
+      <div class="header-text">
+        <h1>Shahjalal University of Science & Technology</h1>
+        <p>Sylhet-3114, Bangladesh</p>
+      </div>
+    </header>
+    <main class="generator-main">
       <h3>Generate Your Official Cover Sheet</h3>
-
       <form id="dataForm">
         <div class="form-grid">
           <div>
             <label for="templateType">Template Type</label>
-            <select id="templateType" required>
+            <select id="templateType" required disabled>
               <option value="">— Select Template —</option>
               <option value="lab-template.docx">Lab Report</option>
               <option value="assignment-template.docx">Assignment</option>
             </select>
           </div>
-
-          <div>
-            <label for="Dept_Name">Department</label>
-            <input type="text" id="Dept_Name" required placeholder="e.g. Electrical and Electronic Engineering">
-          </div>
-          <div>
-            <label for="Course_Code">Course Code</label>
-            <input type="text" id="Course_Code" required placeholder="e.g. EEE 322">
-          </div>
-          <div>
-            <label for="Course_Title">Course Title</label>
-            <input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing">
-          </div>
-          <div>
-            <label for="Course_Teacher">Course Teacher</label>
-            <input type="text" id="Course_Teacher" required placeholder="e.g. Dr. Muhammad Mostafa Amir Faisal">
-          </div>
-          <div>
-            <label for="Course_Teacher_Details">Teacher Designation</label>
-            <input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST">
-          </div>
-          <div>
-            <label for="Reg_No">Registration No.</label>
-            <input type="text" id="Reg_No" required placeholder="e.g. 2020331024">
-          </div>
-          <div>
-            <label for="Name">Student Name</label>
-            <input type="text" id="Name" required placeholder="e.g. Mohammad">
-          </div>
+          <div><label for="Dept_Name">Department</label><input type="text" id="Dept_Name" required placeholder="e.g. Electrical and Electronic Engineering"></div>
+          <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
+          <div><label for="Course_Title">Course Title</label><input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing"></div>
+          <div><label for="Course_Teacher">Course Teacher</label><input type="text" id="Course_Teacher" required placeholder="e.g. Dr. Muhammad Mostafa Amir Faisal"></div>
+          <div><label for="Course_Teacher_Details">Teacher Designation</label><input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST"></div>
+          <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
+          <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
         </div>
-
-        <div id="labFields" class="field-group">
-          <div class="form-grid">
-            <div>
-              <label for="Group_No">Group No</label>
-              <input type="text" id="Group_No" placeholder="e.g. Group A">
-            </div>
-            <div>
-              <label for="Exp_Name">Experiment Name</label>
-              <input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit">
-            </div>
-          </div>
-        </div>
-
-        <div id="assignmentFields" class="field-group">
-          <div class="form-grid">
-            <div class="full-width">
-              <label for="Assignment_Name">Assignment Title</label>
-              <input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform">
-            </div>
-          </div>
-        </div>
-
+        <div id="labFields" class="field-group"><div class="form-grid"><div><label for="Group_No">Group No</label><input type="text" id="Group_No" placeholder="e.g. Group A"></div><div><label for="Exp_Name">Experiment Name</label><input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit"></div></div></div>
+        <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
         <button type="submit">Generate DOCX Cover Page</button>
       </form>
-
       <div id="status"></div>
-
       <div class="converter">
-        <p>Need PDF format?</p>
-        <a href="https://www.ilovepdf.com/word_to_pdf" target="_blank" rel="noopener noreferrer">
-          <button type="button">Convert DOCX to PDF</button>
-        </a>
+        <p>Need PDF format? Use an online converter.</p>
+        <a href="https://www.ilovepdf.com/word_to_pdf" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><button type="button" style="background: #28a745; margin: 0; width: auto; padding: 0.75rem 2rem;">Convert DOCX to PDF</button></a>
       </div>
+      <p style="text-align:center; margin-top:2rem;"><a id="backButton">← Back to selection</a></p>
     </main>
-
-    <footer class="page-footer">
-      <p>Developed by <a href="#" target="_blank" rel="noopener noreferrer">Mubarok Hossen Kamil</a> • EEE, SUST • Batch 2022</p>
-    </footer>
   </div>
+  
+  <footer class="page-footer">
+    <p>Developed by <a href="#" target="_blank" rel="noopener noreferrer">Mubarok Hossen Kamil</a> • EEE, SUST • Batch 2022</p>
+  </footer>
 
   <!-- Libraries -->
   <script src="https://unpkg.com/pizzip@3.1.7/dist/pizzip.js"></script>
@@ -407,75 +197,104 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <script>
-    const templateSelect = document.getElementById('templateType');
-    const labFields = document.getElementById('labFields');
-    const assignmentFields = document.getElementById('assignmentFields');
-    const status = document.getElementById('status');
+    document.addEventListener('DOMContentLoaded', () => {
+      // Page containers
+      const landingPage = document.getElementById('landingPage');
+      const generatorPage = document.getElementById('generatorPage');
 
-    templateSelect.addEventListener('change', () => {
-      const type = templateSelect.value;
-      labFields.classList.toggle('visible', type.includes('lab'));
-      assignmentFields.classList.toggle('visible', type.includes('assignment'));
-    });
+      // Controls
+      const choiceButtons = document.querySelectorAll('.selection-box');
+      const backButton = document.getElementById('backButton');
+      
+      // Form elements
+      const form = document.getElementById('dataForm');
+      const templateSelect = document.getElementById('templateType');
+      const labFields = document.getElementById('labFields');
+      const assignmentFields = document.getElementById('assignmentFields');
+      const status = document.getElementById('status');
 
-    document.getElementById('dataForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+      // Function to show the generator page
+      const showGenerator = (type) => {
+        // Reset form state
+        form.reset();
+        status.innerHTML = '';
+        status.style.backgroundColor = '';
+        labFields.classList.remove('visible');
+        assignmentFields.classList.remove('visible');
 
-      status.innerHTML = '<em>Generating your cover page...</em>';
-      status.style.color = 'var(--sust-blue)';
-      status.style.backgroundColor = '';
+        // Configure form based on choice
+        if (type === 'lab') {
+          templateSelect.value = 'lab-template.docx';
+          labFields.classList.add('visible');
+        } else if (type === 'assignment') {
+          templateSelect.value = 'assignment-template.docx';
+          assignmentFields.classList.add('visible');
+        }
 
-      const templateFile = templateSelect.value;
-      if (!templateFile) {
-        status.innerHTML = 'Please select a template.';
-        status.style.color = 'var(--error)';
-        status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
-        return;
-      }
-
-      const data = {
-        Dept_Name: document.getElementById('Dept_Name').value.trim(),
-        Course_Code: document.getElementById('Course_Code').value.trim(),
-        Course_Title: document.getElementById('Course_Title').value.trim(),
-        Course_Teacher: document.getElementById('Course_Teacher').value.trim(),
-        Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(),
-        Group_No: document.getElementById('Group_No')?.value.trim() || '',
-        Exp_Name: document.getElementById('Exp_Name')?.value.trim() || '',
-        Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || '',
-        Reg_No: document.getElementById('Reg_No').value.trim(),
-        Name: document.getElementById('Name').value.trim()
+        // Switch page visibility
+        landingPage.classList.add('hidden');
+        generatorPage.classList.remove('hidden');
+        window.scrollTo(0, 0); // Scroll to top
       };
 
-      try {
-        const response = await fetch(templateFile);
-        if (!response.ok) throw new Error('Template file not found. Please ensure template files are in the correct directory.');
+      // Function to show the landing page
+      const showLanding = () => {
+        generatorPage.classList.add('hidden');
+        landingPage.classList.remove('hidden');
+        window.scrollTo(0, 0);
+      };
 
-        const content = await response.arrayBuffer();
-        const zip = new PizZip(content);
-        const doc = new docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-        doc.render(data);
-
-        const blob = doc.getZip().generate({
-          type: 'blob',
-          mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      // Add event listeners for landing page choices
+      choiceButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const choice = button.getAttribute('data-choice');
+          showGenerator(choice);
         });
+      });
 
-        const fileName = templateFile.includes('lab')
-          ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.docx`
-          : `Assignment_${data.Reg_No}_${data.Course_Code}.docx`;
+      // Add event listener for the back button
+      backButton.addEventListener('click', showLanding);
 
-        saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
+      // Add event listener for form submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        status.innerHTML = '<em>Generating your cover page...</em>';
+        status.style.color = 'var(--sust-blue)';
+        status.style.backgroundColor = '';
 
-        status.innerHTML = 'Cover page generated & downloaded successfully!';
-        status.style.color = 'var(--success)';
-        status.style.backgroundColor = 'rgba(45, 106, 79, 0.1)';
-      } catch (err) {
-        console.error(err);
-        status.innerHTML = 'Error: ' + err.message;
-        status.style.color = 'var(--error)';
-        status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
-      }
+        const templateFile = templateSelect.value;
+        const data = {
+          Dept_Name: document.getElementById('Dept_Name').value.trim(), Course_Code: document.getElementById('Course_Code').value.trim(), Course_Title: document.getElementById('Course_Title').value.trim(), Course_Teacher: document.getElementById('Course_Teacher').value.trim(), Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(), Group_No: document.getElementById('Group_No')?.value.trim() || '', Exp_Name: document.getElementById('Exp_Name')?.value.trim() || '', Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || '', Reg_No: document.getElementById('Reg_No').value.trim(), Name: document.getElementById('Name').value.trim()
+        };
+
+        try {
+          const response = await fetch(templateFile);
+          if (!response.ok) throw new Error('Template file not found. Ensure template files are in the correct directory.');
+          
+          const content = await response.arrayBuffer();
+          const zip = new PizZip(content);
+          const doc = new docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+          doc.render(data);
+
+          const blob = doc.getZip().generate({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const fileName = templateFile.includes('lab')
+            ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.docx`
+            : `Assignment_${data.Reg_No}_${data.Course_Code}.docx`;
+
+          saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
+
+          status.innerHTML = 'Cover page generated & downloaded successfully!';
+          status.style.color = 'var(--success)';
+          status.style.backgroundColor = 'rgba(45, 106, 79, 0.1)';
+        } catch (err) {
+          console.error(err);
+          status.innerHTML = 'Error: ' + err.message;
+          status.style.color = 'var(--error)';
+          status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
+        }
+      });
     });
   </script>
+
 </body>
 </html>
