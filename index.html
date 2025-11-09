@@ -82,9 +82,8 @@
     .generator-main h3 { font-family: 'EB Garamond', serif; font-size: 1.75rem; color: var(--sust-navy); text-align: center; margin-bottom: 2.5rem; font-weight: 600; }
     .form-grid { display: grid; grid-template-columns: 1fr; gap: 1.375rem; }
     label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2d3748; font-size: 0.9375rem; }
-    input, select { width: 100%; padding: 1rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 0.9375rem; background: #fdfdfd; transition: all 0.3s ease; }
-    select:disabled { background-color: #e9ecef; opacity: 0.8; cursor: not-allowed; }
-    input:focus, select:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
+    input { width: 100%; padding: 1rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 0.9375rem; background: #fdfdfd; transition: all 0.3s ease; }
+    input:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
     .field-group { padding: 1.5625rem; background: #f9fbfc; border-radius: 0.875rem; border: 1.5px dashed var(--border); margin-top: 1.5625rem; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; visibility: hidden; }
     .field-group.visible { opacity: 1; max-height: 500px; border-style: solid; border-color: var(--sust-gold); background: #fefef9; visibility: visible; }
     button { width: 100%; background: var(--sust-blue); color: white; padding: 1.125rem; border: none; border-radius: 0.75rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 2.1875rem; }
@@ -157,15 +156,10 @@
     <main class="generator-main">
       <h3>Generate Your Official Cover Sheet</h3>
       <form id="dataForm">
+        <!-- Hidden input to store the template file name -->
+        <input type="hidden" id="templateFile" value="">
+
         <div class="form-grid">
-          <div>
-            <label for="templateType">Template Type</label>
-            <select id="templateType" required disabled>
-              <option value="">— Select Template —</option>
-              <option value="lab-template.docx">Lab Report</option>
-              <option value="assignment-template.docx">Assignment</option>
-            </select>
-          </div>
           <div><label for="Dept_Name">Department</label><input type="text" id="Dept_Name" required placeholder="e.g. Electrical and Electronic Engineering"></div>
           <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
           <div><label for="Course_Title">Course Title</label><input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing"></div>
@@ -208,33 +202,30 @@
       
       // Form elements
       const form = document.getElementById('dataForm');
-      const templateSelect = document.getElementById('templateType');
+      const hiddenTemplateInput = document.getElementById('templateFile');
       const labFields = document.getElementById('labFields');
       const assignmentFields = document.getElementById('assignmentFields');
       const status = document.getElementById('status');
 
       // Function to show the generator page
       const showGenerator = (type) => {
-        // Reset form state
         form.reset();
         status.innerHTML = '';
         status.style.backgroundColor = '';
         labFields.classList.remove('visible');
         assignmentFields.classList.remove('visible');
 
-        // Configure form based on choice
         if (type === 'lab') {
-          templateSelect.value = 'lab-template.docx';
+          hiddenTemplateInput.value = 'lab-template.docx';
           labFields.classList.add('visible');
         } else if (type === 'assignment') {
-          templateSelect.value = 'assignment-template.docx';
+          hiddenTemplateInput.value = 'assignment-template.docx';
           assignmentFields.classList.add('visible');
         }
 
-        // Switch page visibility
         landingPage.classList.add('hidden');
         generatorPage.classList.remove('hidden');
-        window.scrollTo(0, 0); // Scroll to top
+        window.scrollTo(0, 0);
       };
 
       // Function to show the landing page
@@ -244,7 +235,6 @@
         window.scrollTo(0, 0);
       };
 
-      // Add event listeners for landing page choices
       choiceButtons.forEach(button => {
         button.addEventListener('click', () => {
           const choice = button.getAttribute('data-choice');
@@ -252,17 +242,22 @@
         });
       });
 
-      // Add event listener for the back button
       backButton.addEventListener('click', showLanding);
 
-      // Add event listener for form submission
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         status.innerHTML = '<em>Generating your cover page...</em>';
         status.style.color = 'var(--sust-blue)';
         status.style.backgroundColor = '';
 
-        const templateFile = templateSelect.value;
+        const templateFile = hiddenTemplateInput.value;
+        if (!templateFile) {
+            status.innerHTML = 'Error: No template selected. Please go back.';
+            status.style.color = 'var(--error)';
+            status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
+            return;
+        }
+
         const data = {
           Dept_Name: document.getElementById('Dept_Name').value.trim(), Course_Code: document.getElementById('Course_Code').value.trim(), Course_Title: document.getElementById('Course_Title').value.trim(), Course_Teacher: document.getElementById('Course_Teacher').value.trim(), Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(), Group_No: document.getElementById('Group_No')?.value.trim() || '', Exp_Name: document.getElementById('Exp_Name')?.value.trim() || '', Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || '', Reg_No: document.getElementById('Reg_No').value.trim(), Name: document.getElementById('Name').value.trim()
         };
