@@ -76,6 +76,24 @@
     .selection-box h3 { font-family: 'EB Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
     .selection-box span { font-size: 1rem; color: #4a5568; }
 
+    /* === Video Styles === */
+    .video-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        margin: 3rem auto 0 auto; /* Adjusted margin to add space above */
+        border-radius: 0.75rem;
+        box-shadow: var(--shadow);
+    }
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
 
     /* === Generator Page Styles === */
     .generator-main { padding: 2.5rem 1.5rem; }
@@ -97,37 +115,6 @@
     .page-footer a:hover { text-decoration: underline; }
     #backButton { cursor: pointer; }
 
-    /* === NEW: TUTORIAL VIDEO SECTION STYLES === */
-    .tutorial-section {
-      margin-top: 4rem;
-      padding-top: 2.5rem;
-      border-top: 1px solid #e2e8f0;
-    }
-    .tutorial-section h3 {
-      font-family: 'EB Garamond', serif;
-      font-size: 1.75rem;
-      color: var(--sust-navy);
-      margin-bottom: 0.75rem;
-    }
-    .tutorial-section p {
-      font-size: 1rem;
-      color: #4a5568;
-      max-width: 500px;
-      margin: 0 auto 1.5rem auto;
-    }
-    .video-container {
-      max-width: 640px;
-      margin: 0 auto;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      background-color: #000;
-    }
-    .video-container video {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
 
     /* === Responsive Adjustments === */
     @media (max-width: 480px) {
@@ -162,6 +149,7 @@
     <main class="landing-main">
       <h2>Cover Page Generator</h2>
       <p>Please choose the type of cover page you would like to create. Your selection will take you to a form to enter your details.</p>
+            
       <div class="selection-grid">
         <div class="selection-box" data-choice="lab">
           <h3>Lab Report</h3>
@@ -173,19 +161,10 @@
         </div>
       </div>
 
-      <!-- === NEW: TUTORIAL VIDEO SECTION === -->
-      <div class="tutorial-section">
-        <h3>How to Use</h3>
-        <p>Watch this short video to see how to generate your cover page and convert it to PDF.</p>
-        <div class="video-container">
-          <video controls width="100%">
-            <source src="cover-sheet-tutorial.mp4" type="video/mp4">
-            Your browser does not support the video tag. Please update your browser.
-          </video>
-        </div>
+      <!-- Video Tutorial Section (Moved to the bottom) -->
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/L9VrTpW3CGM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
-      <!-- ================================== -->
-
     </main>
   </div>
 
@@ -201,7 +180,9 @@
     <main class="generator-main">
       <h3>Generate Your Official Cover Sheet</h3>
       <form id="dataForm">
+        <!-- Hidden input to store the template file name -->
         <input type="hidden" id="templateFile" value="">
+
         <div class="form-grid">
           <div><label for="Dept_Name">Department</label><input type="text" id="Dept_Name" required placeholder="e.g. Electrical and Electronic Engineering"></div>
           <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
