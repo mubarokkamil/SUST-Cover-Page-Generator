@@ -97,6 +97,37 @@
     .page-footer a:hover { text-decoration: underline; }
     #backButton { cursor: pointer; }
 
+    /* === NEW: TUTORIAL VIDEO SECTION STYLES === */
+    .tutorial-section {
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    .tutorial-section h3 {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.75rem;
+      color: var(--sust-navy);
+      margin-bottom: 0.75rem;
+    }
+    .tutorial-section p {
+      font-size: 1rem;
+      color: #4a5568;
+      max-width: 500px;
+      margin: 0 auto 1.5rem auto;
+    }
+    .video-container {
+      max-width: 640px;
+      margin: 0 auto;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      background-color: #000;
+    }
+    .video-container video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
 
     /* === Responsive Adjustments === */
     @media (max-width: 480px) {
@@ -141,6 +172,20 @@
           <span>For theoretical courses and general assignments.</span>
         </div>
       </div>
+
+      <!-- === NEW: TUTORIAL VIDEO SECTION === -->
+      <div class="tutorial-section">
+        <h3>How to Use</h3>
+        <p>Watch this short video to see how to generate your cover page and convert it to PDF.</p>
+        <div class="video-container">
+          <video controls width="100%">
+            <source src="cover-sheet-tutorial.mp4" type="video/mp4">
+            Your browser does not support the video tag. Please update your browser.
+          </video>
+        </div>
+      </div>
+      <!-- ================================== -->
+
     </main>
   </div>
 
@@ -156,9 +201,7 @@
     <main class="generator-main">
       <h3>Generate Your Official Cover Sheet</h3>
       <form id="dataForm">
-        <!-- Hidden input to store the template file name -->
         <input type="hidden" id="templateFile" value="">
-
         <div class="form-grid">
           <div><label for="Dept_Name">Department</label><input type="text" id="Dept_Name" required placeholder="e.g. Electrical and Electronic Engineering"></div>
           <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
