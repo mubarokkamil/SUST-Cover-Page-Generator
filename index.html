@@ -192,7 +192,26 @@
           <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
           <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
         </div>
-        <div id="labFields" class="field-group"><div class="form-grid"><div><label for="Group_No">Group No</label><input type="text" id="Group_No" placeholder="e.g. Group A"></div><div><label for="Exp_Name">Experiment Name</label><input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit"></div></div></div>
+
+        <!-- === THIS HTML BLOCK IS UPDATED === -->
+        <div id="labFields" class="field-group">
+          <div class="form-grid">
+            <div>
+              <label for="Exp_No">Experiment No.</label>
+              <input type="text" id="Exp_No" placeholder="e.g. 01">
+            </div>
+            <div>
+              <label for="Group_No">Group No</label>
+              <input type="text" id="Group_No" placeholder="e.g. Group A">
+            </div>
+            <div style="grid-column: 1 / -1;">
+              <label for="Exp_Name">Experiment Name</label>
+              <input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit">
+            </div>
+          </div>
+        </div>
+        <!-- ==================================== -->
+
         <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
         <button type="submit">Generate DOCX Cover Page</button>
       </form>
@@ -243,7 +262,7 @@
           hiddenTemplateInput.value = 'lab-template.docx';
           labFields.classList.add('visible');
         } else if (type === 'assignment') {
-          hiddenTemplateInput.value = 'Assignment-template.docx'; // <-- THIS LINE IS FIXED
+          hiddenTemplateInput.value = 'Assignment-template.docx';
           assignmentFields.classList.add('visible');
         }
 
@@ -282,9 +301,23 @@
             return;
         }
 
+        // === THIS JAVASCRIPT OBJECT IS UPDATED ===
         const data = {
-          Dept_Name: document.getElementById('Dept_Name').value.trim(), Course_Code: document.getElementById('Course_Code').value.trim(), Course_Title: document.getElementById('Course_Title').value.trim(), Course_Teacher: document.getElementById('Course_Teacher').value.trim(), Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(), Group_No: document.getElementById('Group_No')?.value.trim() || '', Exp_Name: document.getElementById('Exp_Name')?.value.trim() || '', Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || '', Reg_No: document.getElementById('Reg_No').value.trim(), Name: document.getElementById('Name').value.trim()
+          Dept_Name: document.getElementById('Dept_Name').value.trim(),
+          Course_Code: document.getElementById('Course_Code').value.trim(),
+          Course_Title: document.getElementById('Course_Title').value.trim(),
+          Course_Teacher: document.getElementById('Course_Teacher').value.trim(),
+          Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(),
+          Reg_No: document.getElementById('Reg_No').value.trim(),
+          Name: document.getElementById('Name').value.trim(),
+          // Lab Specific
+          Exp_No: document.getElementById('Exp_No')?.value.trim() || '',
+          Group_No: document.getElementById('Group_No')?.value.trim() || '',
+          Exp_Name: document.getElementById('Exp_Name')?.value.trim() || '',
+          // Assignment Specific
+          Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || ''
         };
+        // ===========================================
 
         try {
           const response = await fetch(templateFile);
