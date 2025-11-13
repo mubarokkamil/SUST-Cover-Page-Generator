@@ -184,7 +184,41 @@
         <input type="hidden" id="templateFile" value="">
 
         <div class="form-grid">
-          <div><label for="Dept_Name">Department</label><input type="text" id="Dept_Name" required placeholder="e.g. Electrical and Electronic Engineering"></div>
+          <!-- === THIS HTML BLOCK IS UPDATED === -->
+          <div>
+            <label for="Dept_Name">Department</label>
+            <input type="text" id="Dept_Name" list="dept-list" required placeholder="e.g. Electrical and Electronic Engineering">
+            <datalist id="dept-list">
+              <option value="Anthropology">
+              <option value="Architecture">
+              <option value="Bangla">
+              <option value="Biochemistry and Molecular Biology">
+              <option value="Business Administration">
+              <option value="Chemical Engineering & Polymer Science">
+              <option value="Chemistry">
+              <option value="Civil & Environmental Engineering">
+              <option value="Computer Science & Engineering">
+              <option value="Economics">
+              <option value="Electrical & Electronic Engineering">
+              <option value="English">
+              <option value="Food Engineering & Tea Technology">
+              <option value="Forestry & Environmental Science">
+              <option value="Geography and Environment">
+              <option value="Genetic Engineering & Biotechnology">
+              <option value="Industrial & Production Engineering">
+              <option value="Mathematics">
+              <option value="Mechanical Engineering">
+              <option value="Oceanography">
+              <option value="Petroleum and Mining Engineering">
+              <option value="Physics">
+              <option value="Political Studies">
+              <option value="Public Administration">
+              <option value="Social Work">
+              <option value="Sociology">
+              <option value="Statistics">
+            </datalist>
+          </div>
+          <!-- ==================================== -->
           <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
           <div><label for="Course_Title">Course Title</label><input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing"></div>
           <div><label for="Course_Teacher">Course Teacher</label><input type="text" id="Course_Teacher" required placeholder="e.g. Dr. Muhammad Mostafa Amir Faisal"></div>
@@ -193,7 +227,6 @@
           <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
         </div>
 
-        <!-- === THIS HTML BLOCK IS UPDATED === -->
         <div id="labFields" class="field-group">
           <div class="form-grid">
             <div>
@@ -210,7 +243,6 @@
             </div>
           </div>
         </div>
-        <!-- ==================================== -->
 
         <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
         <button type="submit">Generate DOCX Cover Page</button>
@@ -225,9 +257,9 @@
   </div>
   
  <footer class="page-footer">
-    <p>Developed by <strong>Mubarok Hossen Kamil</strong> • EEE, SUST • Batch 2022</p>
+    <p>Developed by <strong>Mubarok Hossen Kamil</strong> • EEE, SUST-22</p>
     <p style="margin-top: 1rem; font-size: 0.8rem; color: #64748b;">
-        <strong>Disclaimer:</strong>This is an unofficial student project and is not affiliated with SUST administration.
+        <strong>Disclaimer:</strong>This is an student project and is not affiliated with SUST administration.
     </p>
 </footer>
 
@@ -304,7 +336,6 @@
             return;
         }
 
-        // === THIS JAVASCRIPT OBJECT IS UPDATED ===
         const data = {
           Dept_Name: document.getElementById('Dept_Name').value.trim(),
           Course_Code: document.getElementById('Course_Code').value.trim(),
@@ -320,7 +351,6 @@
           // Assignment Specific
           Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || ''
         };
-        // ===========================================
 
         try {
           const response = await fetch(templateFile);
