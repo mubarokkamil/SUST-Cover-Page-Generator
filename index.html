@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SUST Cover Page Generator</title>
   <meta name="description" content="Official SUST Cover Sheet Generator • Shahjalal University of Science and Technology">
-
+  
   <!-- Academic Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -20,13 +20,14 @@
       --shadow: 0 12px 35px rgba(10, 38, 71, 0.12);
       --success: #2d6a4f;
       --error: #9B1D41;
+      --bg-gradient: linear-gradient(135deg, #f5f7fa, #eef2f6);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background-color: #f5f7fa;
+      background: var(--bg-gradient);
       padding: 1rem;
       line-height: 1.6;
       color: #333;
@@ -34,110 +35,290 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      scroll-behavior: smooth;
     }
 
-    /* === Main Container & Page Visibility === */
-    .hidden {
-      display: none !important;
-    }
-    
+    /* === Container === */
     .page-container {
-      max-width: 800px;
+      max-width: 880px;
       width: 100%;
       margin: auto;
-      background: white;
-      border-radius: 1.25rem;
-      overflow: hidden;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
       box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: all 0.4s ease;
     }
-    
-    /* === Shared Header === */
+
+    .hidden { display: none !important; }
+
+    /* === Header === */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 2rem;
+      padding: 1.75rem 2rem;
       border-bottom: 1px solid #e2e8f0;
-      background-color: #fdfdfd;
+      background: linear-gradient(to right, #ffffff, #f7f9fb);
     }
-    .header-logo { width: 60px; height: auto; flex-shrink: 0; }
+
+    .header-logo { width: 70px; height: auto; flex-shrink: 0; }
     .header-text { text-align: right; color: var(--sust-navy); }
-    .header-text h1 { font-family: 'EB Garamond', Georgia, serif; font-size: 1.5rem; font-weight: 600; margin: 0; }
-    .header-text p { font-size: 0.9rem; opacity: 0.9; margin: 0; }
+    .header-text h1 {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .header-text p { font-size: 0.95rem; opacity: 0.9; }
 
+    /* === Landing Page === */
+    .landing-main {
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+      background: linear-gradient(180deg, #fdfdfd 0%, #f9fafb 100%);
+    }
 
-    /* === Landing Page Styles === */
-    .landing-main { text-align: center; padding: 4rem 2rem; }
-    .landing-main h2 { font-family: 'EB Garamond', serif; font-size: 2.25rem; color: var(--sust-navy); margin-bottom: 1rem; }
-    .landing-main p { font-size: 1.125rem; color: #4a5568; max-width: 600px; margin: 0 auto 3rem auto; }
-    .selection-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-    .selection-box { cursor: pointer; display: block; padding: 2rem; background-color: #f8fafc; border: 2px solid var(--border); border-radius: 0.75rem; text-decoration: none; color: var(--sust-blue); transition: all 0.3s ease; }
-    .selection-box:hover { border-color: var(--sust-gold); transform: translateY(-5px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15); background-color: #fff; }
-    .selection-box h3 { font-family: 'EB Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .selection-box span { font-size: 1rem; color: #4a5568; }
+    .landing-main h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: 2.5rem;
+      color: var(--sust-navy);
+      margin-bottom: 1rem;
+    }
 
-    /* === Video Styles === */
+    .landing-main p {
+      font-size: 1.1rem;
+      color: #4a5568;
+      max-width: 640px;
+      margin: 0 auto 3rem;
+    }
+
+    .selection-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      margin-top: 2rem;
+    }
+
+    .selection-box {
+      cursor: pointer;
+      padding: 2.5rem 2rem;
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      text-decoration: none;
+      color: var(--sust-blue);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .selection-box:hover {
+      transform: translateY(-6px);
+      border-color: var(--sust-gold);
+      box-shadow: 0 10px 30px rgba(212,175,55,0.15);
+      background: linear-gradient(145deg, #ffffff, #fef9e7);
+    }
+
+    .selection-box h3 {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .selection-box span {
+      font-size: 1rem;
+      color: #475569;
+    }
+
+    /* === Video === */
     .video-container {
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        margin: 3rem auto 0 auto; /* Adjusted margin to add space above */
-        border-radius: 0.75rem;
-        box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      padding-top: 56.25%;
+      margin: 3.5rem auto 0;
+      border-radius: 1rem;
+      box-shadow: var(--shadow);
     }
+
     .video-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
-    /* === Generator Page Styles === */
-    .generator-main { padding: 2.5rem 1.5rem; }
-    .generator-main h3 { font-family: 'EB Garamond', serif; font-size: 1.75rem; color: var(--sust-navy); text-align: center; margin-bottom: 2.5rem; font-weight: 600; }
-    .form-grid { display: grid; grid-template-columns: 1fr; gap: 1.375rem; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2d3748; font-size: 0.9375rem; }
-    input { width: 100%; padding: 1rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 0.9375rem; background: #fdfdfd; transition: all 0.3s ease; }
-    input:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
-    .field-group { padding: 1.5625rem; background: #f9fbfc; border-radius: 0.875rem; border: 1.5px dashed var(--border); margin-top: 1.5625rem; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; visibility: hidden; }
-    .field-group.visible { opacity: 1; max-height: 500px; border-style: solid; border-color: var(--sust-gold); background: #fefef9; visibility: visible; }
-    button { width: 100%; background: var(--sust-blue); color: white; padding: 1.125rem; border: none; border-radius: 0.75rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 2.1875rem; }
-    button:hover:not(:disabled) { background: #002b55; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 51, 102, 0.3); }
-    #status { margin-top: 1.5rem; text-align: center; font-weight: 500; padding: 0.875rem; border-radius: 0.625rem; min-height: 3.5rem; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
-    .converter { margin-top: 2.8rem; text-align: center; padding: 1.875rem; background: #f0f4f8; border-radius: 0.875rem; border: 1px solid #d0d7e0; }
-    
-    /* === Shared Footer === */
-    .page-footer { text-align: center; padding: 2rem 1rem; color: #64748b; font-size: 0.875rem; }
-    .page-footer a { color: var(--sust-blue); text-decoration: none; font-weight: 500; }
-    .page-footer a:hover { text-decoration: underline; }
-    #backButton { cursor: pointer; }
-
-
-    /* === Responsive Adjustments === */
-    @media (max-width: 480px) {
-        body { padding: 0.5rem; }
-        .header { padding: 1rem 1.5rem; }
-        .header-logo { width: 50px; }
-        .header-text h1 { font-size: 1.2rem; }
-        .header-text p { font-size: 0.8rem; }
-        .landing-main { padding: 2.5rem 1rem; }
-        .generator-main { padding: 2rem 1rem; }
+    /* === Generator Page === */
+    .generator-main {
+      padding: 3rem 2rem;
+      background: #ffffff;
     }
+
+    .generator-main h3 {
+      font-family: 'EB Garamond', serif;
+      font-size: 2rem;
+      color: var(--sust-navy);
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    label {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 0.95rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 0.75rem;
+      font-size: 0.95rem;
+      background: #fdfdfd;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--sust-gold);
+      box-shadow: 0 0 0 0.3rem rgba(212, 175, 55, 0.15);
+      background: white;
+    }
+
+    .field-group {
+      padding: 1.75rem;
+      background: #f9fbfc;
+      border-radius: 0.875rem;
+      border: 1.5px dashed var(--border);
+      margin-top: 1.75rem;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.5s ease-in-out;
+      visibility: hidden;
+    }
+
+    .field-group.visible {
+      opacity: 1;
+      max-height: 550px;
+      border-style: solid;
+      border-color: var(--sust-gold);
+      background: #fffef5;
+      visibility: visible;
+    }
+
+    button {
+      width: 100%;
+      background: var(--sust-blue);
+      color: white;
+      padding: 1.125rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 2.2rem;
+    }
+
+    button:hover:not(:disabled) {
+      background: #002b55;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,51,102,0.25);
+    }
+
+    #status {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-weight: 500;
+      padding: 0.875rem;
+      border-radius: 0.625rem;
+      min-height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .converter {
+      margin-top: 2.8rem;
+      text-align: center;
+      padding: 2rem;
+      background: #f0f4f8;
+      border-radius: 0.875rem;
+      border: 1px solid #d0d7e0;
+    }
+
+    .converter button {
+      background: #2e7d32;
+      width: auto;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+    }
+
+    .converter button:hover {
+      background: #256528;
+    }
+
+    .page-footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #64748b;
+      font-size: 0.9rem;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .page-footer a {
+      color: var(--sust-blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .page-footer a:hover {
+      text-decoration: underline;
+    }
+
+    #backButton {
+      cursor: pointer;
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: var(--sust-blue);
+      font-weight: 600;
+    }
+
+    #backButton:hover {
+      text-decoration: underline;
+    }
+
+    /* === Responsive === */
     @media (min-width: 768px) {
       .selection-grid { grid-template-columns: 1fr 1fr; }
       .form-grid { grid-template-columns: 1fr 1fr; }
-      .header-logo { width: 70px; }
-      .header-text h1 { font-size: 1.75rem; }
-      .generator-main { padding: 3.4375rem 4.375rem; }
+      .generator-main { padding: 3.5rem 4rem; }
+    }
+
+    @media (max-width: 480px) {
+      .header { padding: 1rem 1.25rem; }
+      .header-logo { width: 55px; }
+      .landing-main { padding: 3rem 1rem; }
+      .generator-main { padding: 2rem 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Landing Page Section -->
+  <!-- Landing Page -->
   <div id="landingPage" class="page-container">
     <header class="header">
       <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
@@ -146,29 +327,29 @@
         <p>Sylhet-3114, Bangladesh</p>
       </div>
     </header>
+
     <main class="landing-main">
-      <h2>Cover Page Generator</h2>
-      <p>Please choose the type of cover page you would like to create. Your selection will take you to a form to enter your details.</p>
-            
+      <h2>Official Cover Page Generator</h2>
+      <p>Generate professional and official SUST cover sheets instantly for your <strong>lab reports</strong> or <strong>assignments</strong>.</p>
+
       <div class="selection-grid">
         <div class="selection-box" data-choice="lab">
           <h3>Lab Report</h3>
-          <span>For practical courses and lab experiments.</span>
+          <span>For practical courses and laboratory experiments.</span>
         </div>
         <div class="selection-box" data-choice="assignment">
           <h3>Assignment</h3>
-          <span>For theoretical courses and general assignments.</span>
+          <span>For theoretical courses and written submissions.</span>
         </div>
       </div>
 
-      <!-- Video Tutorial Section (Moved to the bottom) -->
       <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/L9VrTpW3CGM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/L9VrTpW3CGM" title="Tutorial Video" allowfullscreen></iframe>
       </div>
     </main>
   </div>
 
-  <!-- Generator Page Section (Initially Hidden) -->
+  <!-- Generator Page -->
   <div id="generatorPage" class="page-container hidden">
     <header class="header">
       <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
@@ -177,207 +358,142 @@
         <p>Sylhet-3114, Bangladesh</p>
       </div>
     </header>
+
     <main class="generator-main">
       <h3>Generate Your Official Cover Sheet</h3>
       <form id="dataForm">
-        <!-- Hidden input to store the template file name -->
         <input type="hidden" id="templateFile" value="">
 
         <div class="form-grid">
-          <!-- === THIS HTML BLOCK IS UPDATED === -->
           <div>
             <label for="Dept_Name">Department</label>
-            <input type="text" id="Dept_Name" list="dept-list" required placeholder="e.g. Electrical and Electronic Engineering">
+            <input type="text" id="Dept_Name" list="dept-list" required placeholder="e.g. Electrical & Electronic Engineering">
             <datalist id="dept-list">
-              <option value="Anthropology">
-              <option value="Architecture">
-              <option value="Bangla">
-              <option value="Biochemistry and Molecular Biology">
-              <option value="Business Administration">
-              <option value="Chemical Engineering & Polymer Science">
-              <option value="Chemistry">
-              <option value="Civil & Environmental Engineering">
-              <option value="Computer Science & Engineering">
-              <option value="Economics">
               <option value="Electrical & Electronic Engineering">
-              <option value="English">
-              <option value="Food Engineering & Tea Technology">
-              <option value="Forestry & Environmental Science">
-              <option value="Geography and Environment">
-              <option value="Genetic Engineering & Biotechnology">
-              <option value="Industrial & Production Engineering">
-              <option value="Mathematics">
+              <option value="Computer Science & Engineering">
+              <option value="Civil & Environmental Engineering">
               <option value="Mechanical Engineering">
-              <option value="Oceanography">
-              <option value="Petroleum and Mining Engineering">
+              <option value="Chemical Engineering & Polymer Science">
+              <option value="Industrial & Production Engineering">
               <option value="Physics">
-              <option value="Political Studies">
-              <option value="Public Administration">
-              <option value="Social Work">
+              <option value="Mathematics">
+              <option value="Economics">
               <option value="Sociology">
-              <option value="Statistics">
             </datalist>
           </div>
-          <!-- ==================================== -->
           <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
           <div><label for="Course_Title">Course Title</label><input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing"></div>
           <div><label for="Course_Teacher">Course Teacher</label><input type="text" id="Course_Teacher" required placeholder="e.g. Dr. Muhammad Mostafa Amir Faisal"></div>
           <div><label for="Course_Teacher_Details">Teacher Designation</label><input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST"></div>
           <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
-          <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
+          <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mubarok Hossen Kamil"></div>
         </div>
 
         <div id="labFields" class="field-group">
           <div class="form-grid">
-            <div>
-              <label for="Exp_No">Experiment No.</label>
-              <input type="text" id="Exp_No" placeholder="e.g. 01">
-            </div>
-            <div>
-              <label for="Group_No">Group No</label>
-              <input type="text" id="Group_No" placeholder="e.g. Group A">
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label for="Exp_Name">Experiment Name</label>
-              <input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit">
-            </div>
+            <div><label for="Exp_No">Experiment No.</label><input type="text" id="Exp_No" placeholder="e.g. 01"></div>
+            <div><label for="Group_No">Group No.</label><input type="text" id="Group_No" placeholder="e.g. A"></div>
+            <div style="grid-column: 1 / -1;"><label for="Exp_Name">Experiment Name</label><input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit"></div>
           </div>
         </div>
 
-        <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
+        <div id="assignmentFields" class="field-group">
+          <div class="form-grid">
+            <div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div>
+          </div>
+        </div>
+
         <button type="submit">Generate DOCX Cover Page</button>
       </form>
+
       <div id="status"></div>
+
       <div class="converter">
-        <p>Need PDF format? Use an online converter.</p>
-        <a href="https://www.ilovepdf.com/word_to_pdf" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><button type="button" style="background: #28a745; margin: 0; width: auto; padding: 0.75rem 2rem;">Convert DOCX to PDF</button></a>
+        <p>Need PDF format? Convert your DOCX instantly:</p>
+        <a href="https://www.ilovepdf.com/word_to_pdf" target="_blank">
+          <button type="button">Convert DOCX to PDF</button>
+        </a>
       </div>
-      <p style="text-align:center; margin-top:2rem;"><a id="backButton">← Back to selection</a></p>
+
+      <p style="text-align:center;"><a id="backButton">← Back to selection</a></p>
     </main>
   </div>
-  
- <footer class="page-footer">
-    <p>Developed by <strong>Mubarok Hossen Kamil</strong> • EEE, SUST • Batch 2022</p>
-    
-</footer>
 
-  <!-- Libraries -->
+  <footer class="page-footer">
+    <p>Developed by <strong>Mubarok Hossen Kamil</strong> • EEE, SUST • Batch 2022</p>
+    <p style="margin-top:0.5rem;">Unofficial student tool — not affiliated with SUST administration.</p>
+  </footer>
+
+  <!-- JS Libraries -->
   <script src="https://unpkg.com/pizzip@3.1.7/dist/pizzip.js"></script>
   <script src="https://unpkg.com/docxtemplater@3.30.1/build/docxtemplater.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Page containers
       const landingPage = document.getElementById('landingPage');
       const generatorPage = document.getElementById('generatorPage');
-
-      // Controls
-      const choiceButtons = document.querySelectorAll('.selection-box');
-      const backButton = document.getElementById('backButton');
-      
-      // Form elements
       const form = document.getElementById('dataForm');
       const hiddenTemplateInput = document.getElementById('templateFile');
       const labFields = document.getElementById('labFields');
       const assignmentFields = document.getElementById('assignmentFields');
       const status = document.getElementById('status');
 
-      // Function to show the generator page
-      const showGenerator = (type) => {
-        form.reset();
-        status.innerHTML = '';
-        status.style.backgroundColor = '';
-        labFields.classList.remove('visible');
-        assignmentFields.classList.remove('visible');
-
-        if (type === 'lab') {
-          hiddenTemplateInput.value = 'lab-template.docx';
-          labFields.classList.add('visible');
-        } else if (type === 'assignment') {
-          hiddenTemplateInput.value = 'Assignment-template.docx';
-          assignmentFields.classList.add('visible');
-        }
-
-        landingPage.classList.add('hidden');
-        generatorPage.classList.remove('hidden');
-        window.scrollTo(0, 0);
-      };
-
-      // Function to show the landing page
-      const showLanding = () => {
-        generatorPage.classList.add('hidden');
-        landingPage.classList.remove('hidden');
-        window.scrollTo(0, 0);
-      };
-
-      choiceButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const choice = button.getAttribute('data-choice');
-          showGenerator(choice);
+      document.querySelectorAll('.selection-box').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const choice = btn.dataset.choice;
+          form.reset();
+          labFields.classList.remove('visible');
+          assignmentFields.classList.remove('visible');
+          status.innerHTML = '';
+          if (choice === 'lab') {
+            hiddenTemplateInput.value = 'lab-template.docx';
+            labFields.classList.add('visible');
+          } else {
+            hiddenTemplateInput.value = 'Assignment-template.docx';
+            assignmentFields.classList.add('visible');
+          }
+          landingPage.classList.add('hidden');
+          generatorPage.classList.remove('hidden');
+          window.scrollTo(0,0);
         });
       });
 
-      backButton.addEventListener('click', showLanding);
+      document.getElementById('backButton').addEventListener('click', () => {
+        generatorPage.classList.add('hidden');
+        landingPage.classList.remove('hidden');
+        window.scrollTo(0,0);
+      });
 
-      form.addEventListener('submit', async (e) => {
+      form.addEventListener('submit', async e => {
         e.preventDefault();
         status.innerHTML = '<em>Generating your cover page...</em>';
         status.style.color = 'var(--sust-blue)';
-        status.style.backgroundColor = '';
 
         const templateFile = hiddenTemplateInput.value;
-        if (!templateFile) {
-            status.innerHTML = 'Error: No template selected. Please go back.';
-            status.style.color = 'var(--error)';
-            status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
-            return;
-        }
+        if (!templateFile) return alert("No template selected.");
 
-        const data = {
-          Dept_Name: document.getElementById('Dept_Name').value.trim(),
-          Course_Code: document.getElementById('Course_Code').value.trim(),
-          Course_Title: document.getElementById('Course_Title').value.trim(),
-          Course_Teacher: document.getElementById('Course_Teacher').value.trim(),
-          Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(),
-          Reg_No: document.getElementById('Reg_No').value.trim(),
-          Name: document.getElementById('Name').value.trim(),
-          // Lab Specific
-          Exp_No: document.getElementById('Exp_No')?.value.trim() || '',
-          Group_No: document.getElementById('Group_No')?.value.trim() || '',
-          Exp_Name: document.getElementById('Exp_Name')?.value.trim() || '',
-          // Assignment Specific
-          Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || ''
-        };
-
+        const data = Object.fromEntries(new FormData(form).entries());
         try {
           const response = await fetch(templateFile);
-          if (!response.ok) throw new Error('Template file not found. Ensure template files are in the correct directory.');
-          
+          if (!response.ok) throw new Error("Template not found.");
           const content = await response.arrayBuffer();
           const zip = new PizZip(content);
           const doc = new docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
           doc.render(data);
-
-          const blob = doc.getZip().generate({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+          const blob = doc.getZip().generate({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
           const fileName = templateFile.includes('lab')
             ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.docx`
             : `Assignment_${data.Reg_No}_${data.Course_Code}.docx`;
-
-          saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
-
-          status.innerHTML = 'Cover page generated & downloaded successfully!';
+          saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, "_"));
+          status.innerHTML = "✅ Cover page generated successfully!";
           status.style.color = 'var(--success)';
-          status.style.backgroundColor = 'rgba(45, 106, 79, 0.1)';
         } catch (err) {
-          console.error(err);
-          status.innerHTML = 'Error: ' + err.message;
+          status.innerHTML = "❌ Error: " + err.message;
           status.style.color = 'var(--error)';
-          status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
         }
       });
     });
   </script>
-
 </body>
 </html>
