@@ -369,7 +369,8 @@
           doc.render(data);
 
           const blob = doc.getZip().generate({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-          const fileName = templateFile.includes('lab')
+          const isLabReport = templateFile.includes('lab');
+          const fileName = isLabReport
             ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.docx`
             : `Assignment_${data.Reg_No}_${data.Course_Code}.docx`;
 
@@ -378,6 +379,17 @@
           status.innerHTML = 'Cover page generated & downloaded successfully!';
           status.style.color = 'var(--success)';
           status.style.backgroundColor = 'rgba(45, 106, 79, 0.1)';
+
+          // --- [START] ADDED FOR GOOGLE ANALYTICS EVENT TRACKING ---
+          if (typeof gtag === 'function') {
+            gtag('event', 'generate_cover_page', {
+              'document_type': isLabReport ? 'Lab Report' : 'Assignment',
+              'department': data.Dept_Name,
+              'course_code': data.Course_Code
+            });
+          }
+          // --- [END] ADDED FOR GOOGLE ANALYTICS EVENT TRACKING ---
+
         } catch (err) {
           console.error(err);
           status.innerHTML = 'Error: ' + err.message;
