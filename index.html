@@ -8,26 +8,19 @@
   <meta name="keywords" content="SUST cover page, SUST assignment cover page, SUST cover sheet, SUST lab report cover page generator, Shahjalal University of Science and Technology, SUST form, SUST template, SUST pdf generator">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
-  <!-- Open Graph (Facebook / LinkedIn preview) -->
   <meta property="og:title" content="SUST Cover Page Generator">
   <meta property="og:description" content="Instantly generate SUST assignment and lab report cover pages. Free tool for EEE SUST students.">
   <meta property="og:image" content="https://mubarokkamil.github.io/SUST-Cover-Page-Generator/sust_logo.png">
   <meta property="og:url" content="https://mubarokkamil.github.io/SUST-Cover-Page-Generator/">
   <meta property="og:type" content="website">
 
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SUST Cover Page Generator">
   <meta name="twitter:description" content="Generate official SUST cover pages instantly—free for all SUST students.">
   <meta name="twitter:image" content="https://mubarokkamil.github.io/SUST-Cover-Page-Generator/sust_logo.png">
 
-  <!-- Mobile Friendly -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Canonical Link -->
   <link rel="canonical" href="https://mubarokkamil.github.io/SUST-Cover-Page-Generator/">
 
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPCRSKJK05"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -37,7 +30,6 @@
     gtag('config', 'G-MPCRSKJK05');
   </script>
 
-  <!-- Academic Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -73,13 +65,18 @@
     }
     
     .page-container {
-      max-width: 800px;
+      max-width: 800px; /* Original max-width */
       width: 100%;
       margin: auto;
       background: white;
       border-radius: 1.25rem;
       overflow: hidden;
       box-shadow: var(--shadow);
+    }
+    
+    /* Widen container on Generator Page for 2-col layout */
+    #generatorPage {
+      max-width: 1200px;
     }
     
     /* === Shared Header === */
@@ -164,29 +161,158 @@
       .header-text h1 { font-size: 1.75rem; }
       .generator-main { padding: 3.4375rem 4.375rem; }
     }
+
+    /* === [NEW] Generator Page Layout & Live Preview Styles === */
+    .generator-layout {
+      display: grid;
+      grid-template-columns: 1fr; /* Default to 1 column */
+      gap: 2.5rem;
+    }
+
+    .form-container {
+      /* This container now holds the form and status */
+      width: 100%;
+    }
+
+    #livePreviewContainer {
+      width: 100%;
+    }
+
+    .preview-page {
+      background: #ffffff;
+      border: 1px solid #dfe6e9;
+      border-radius: 0.5rem;
+      padding: 2.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      font-family: 'EB Garamond', Georgia, serif;
+      color: #333;
+      min-height: 500px; /* Give it some height */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      line-height: 1.5;
+    }
+
+    .preview-header {
+      text-align: center;
+      border-bottom: 2px solid #0A2647;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .preview-header .preview-logo {
+      width: 50px;
+      margin-bottom: 0.5rem;
+    }
+    .preview-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #0A2647;
+      margin: 0;
+    }
+    .preview-header p {
+      font-size: 1rem;
+      margin: 0;
+    }
+    .preview-header p strong {
+      font-family: 'Inter', sans-serif; /* Use sans-serif for the dynamic part */
+      font-weight: 600;
+      color: #003366;
+    }
+
+    .preview-body {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 1.2rem;
+    }
+    .preview-body p {
+      margin: 0.25rem 0;
+    }
+    .preview-body strong {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.3rem;
+      color: #003366;
+      font-weight: 600;
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    .preview-submission-details {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .preview-field-group {
+      display: grid;
+      grid-template-columns: 120px 1fr; /* Label and Value */
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: #f9fbfc;
+      border-radius: 0.5rem;
+      border: 1px solid #e2e8f0;
+    }
+    .preview-field-group .label {
+      font-weight: 600;
+      color: #0A2647;
+    }
+    .preview-field-group .value {
+      color: #333;
+      word-break: break-word;
+    }
+    .preview-field-group .value strong,
+    .preview-field-group .value span {
+      display: block;
+    }
+    .preview-field-group .value strong {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .preview-field-group .value span {
+      font-size: 0.9rem;
+      color: #4a5568;
+    }
+
+    /* Adjustments for larger screens */
+    @media (min-width: 768px) {
+      .generator-main {
+        /* Keep your existing padding */
+        padding: 3.4375rem 4.375rem; 
+      }
+    }
+
+    /* This is the key media query for the 2-column layout */
+    @media (min-width: 1024px) {
+      .generator-layout {
+        grid-template-columns: 1fr 1fr; /* 2 columns on large screens */
+      }
+      #livePreviewContainer {
+        /* Make the preview sticky on scroll */
+        position: sticky;
+        top: 2rem;
+        align-self: start;
+      }
+    }
+
   </style>
 
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "SUST Cover Page Generator",
-  "url": "https://mubarokkamil.github.io/SUST-Cover-Page-Generator/",
-  "description": "Official style cover page generator for SUST assignment and lab reports.",
-  "applicationCategory": "EducationApplication",
-  "operatingSystem": "All",
-  "author": {
-    "@type": "Person",
-    "name": "Mubarok Hossen Kamil"
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SUST Cover Page Generator",
+    "url": "https://mubarokkamil.github.io/SUST-Cover-Page-Generator/",
+    "description": "Official style cover page generator for SUST assignment and lab reports.",
+    "applicationCategory": "EducationApplication",
+    "operatingSystem": "All",
+    "author": {
+      "@type": "Person",
+      "name": "Mubarok Hossen Kamil"
+    }
   }
-}
-</script>
-
-
+  </script>
 </head>
 <body>
 
-  <!-- Landing Page Section -->
   <div id="landingPage" class="page-container">
     <header class="header">
       <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
@@ -210,14 +336,12 @@
         </div>
       </div>
 
-      <!-- Video Tutorial Section (Moved to the bottom) -->
       <div class="video-container">
         <iframe src="https://www.youtube.com/embed/L9VrTpW3CGM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </main>
   </div>
 
-  <!-- Generator Page Section (Initially Hidden) -->
   <div id="generatorPage" class="page-container hidden">
     <header class="header">
       <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
@@ -226,138 +350,265 @@
         <p>Sylhet-3114, Bangladesh</p>
       </div>
     </header>
+    
     <main class="generator-main">
       <h3>Generate Your Official Cover Sheet</h3>
-      <form id="dataForm">
-        <!-- Hidden input to store the template file name -->
-        <input type="hidden" id="templateFile" value="">
+      
+      <div class="generator-layout">
+        
+        <div class="form-container">
+          <form id="dataForm">
+            <input type="hidden" id="templateFile" value="">
 
-        <div class="form-grid">
-          <!-- === THIS HTML BLOCK IS UPDATED === -->
-          <div>
-            <label for="Dept_Name">Department</label>
-            <input type="text" id="Dept_Name" list="dept-list" required placeholder="e.g. Electrical and Electronic Engineering">
-            <datalist id="dept-list">
-              <option value="Anthropology">
-              <option value="Architecture">
-              <option value="Bangla">
-              <option value="Biochemistry and Molecular Biology">
-              <option value="Business Administration">
-              <option value="Chemical Engineering & Polymer Science">
-              <option value="Chemistry">
-              <option value="Civil & Environmental Engineering">
-              <option value="Computer Science & Engineering">
-              <option value="Economics">
-              <option value="Electrical & Electronic Engineering">
-              <option value="English">
-              <option value="Food Engineering & Tea Technology">
-              <option value="Forestry & Environmental Science">
-              <option value="Geography and Environment">
-              <option value="Genetic Engineering & Biotechnology">
-              <option value="Industrial & Production Engineering">
-              <option value="Mathematics">
-              <option value="Mechanical Engineering">
-              <option value="Oceanography">
-              <option value="Petroleum and Mining Engineering">
-              <option value="Physics">
-              <option value="Political Studies">
-              <option value="Public Administration">
-              <option value="Social Work">
-              <option value="Sociology">
-              <option value="Statistics">
-            </datalist>
-          </div>
-          <!-- ==================================== -->
-          <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
-          <div><label for="Course_Title">Course Title</label><input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing"></div>
-          <div><label for="Course_Teacher">Course Teacher</label><input type="text" id="Course_Teacher" required placeholder="e.g. Dr. Muhammad Mostafa Amir Faisal"></div>
-          <div><label for="Course_Teacher_Details">Teacher Designation</label><input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST"></div>
-          <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
-          <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
+            <div class="form-grid">
+              <div>
+                <label for="Dept_Name">Department</label>
+                <input type="text" id="Dept_Name" list="dept-list" required placeholder="e.g. Electrical and Electronic Engineering">
+                <datalist id="dept-list">
+                  <option value="Anthropology">
+                  <option value="Architecture">
+                  <option value="Bangla">
+                  <option value="Biochemistry and Molecular Biology">
+                  <option value="Business Administration">
+                  <option value="Chemical Engineering & Polymer Science">
+                  <option value="Chemistry">
+                  <option value="Civil & Environmental Engineering">
+                  <option value="Computer Science & Engineering">
+                  <option value="Economics">
+                  <option value="Electrical & Electronic Engineering">
+                  <option value="English">
+                  <option value="Food Engineering & Tea Technology">
+                  <option value="Forestry & Environmental Science">
+                  <option value="Geography and Environment">
+                  <option value="Genetic Engineering & Biotechnology">
+                  <option value="Industrial & Production Engineering">
+                  <option value="Mathematics">
+                  <option value="Mechanical Engineering">
+                  <option value="Oceanography">
+                  <option value="Petroleum and Mining Engineering">
+                  <option value="Physics">
+                  <option value="Political Studies">
+                  <option value="Public Administration">
+                  <option value="Social Work">
+                  <option value="Sociology">
+                  <option value="Statistics">
+                </datalist>
+              </div>
+              <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
+              <div><label for="Course_Title">Course Title</label><input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing"></div>
+              <div><label for="Course_Teacher">Course Teacher</label><input type="text" id="Course_Teacher" required placeholder="e.g. Dr. Muhammad Mostafa Amir Faisal"></div>
+              <div><label for="Course_Teacher_Details">Teacher Designation</label><input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST"></div>
+              <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
+              <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
+            </div>
+
+            <div id="labFields" class="field-group">
+              <div class="form-grid">
+                <div>
+                  <label for="Exp_No">Experiment No.</label>
+                  <input type="text" id="Exp_No" placeholder="e.g. 01">
+                </div>
+                <div>
+                  <label for="Group_No">Group No</label>
+                  <input type="text" id="Group_No" placeholder="e.g. Group A">
+                </div>
+                <div style="grid-column: 1 / -1;">
+                  <label for="Exp_Name">Experiment Name</label>
+                  <input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit">
+                </div>
+              </div>
+            </div>
+
+            <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
+            
+            <button type="submit">Generate Cover Page</button>
+          </form>
+          <div id="status"></div>
         </div>
 
-        <div id="labFields" class="field-group">
-          <div class="form-grid">
-            <div>
-              <label for="Exp_No">Experiment No.</label>
-              <input type="text" id="Exp_No" placeholder="e.g. 01">
+        <div id="livePreviewContainer">
+          <div class="preview-page">
+            <div class="preview-header">
+              <img src="sust_logo.png" alt="SUST Logo" class="preview-logo">
+              <h2>Shahjalal University of Science & Technology</h2>
+              <p>Sylhet-3114, Bangladesh</p>
+              <p>Department of <strong id="preview-Dept_Name">[Department]</strong></p>
             </div>
-            <div>
-              <label for="Group_No">Group No</label>
-              <input type="text" id="Group_No" placeholder="e.g. Group A">
+
+            <div class="preview-body">
+              <div id="preview-lab-section" class="hidden">
+                <p>Experiment No: <strong id="preview-Exp_No">[No]</strong></p>
+                <p>Experiment Name: <strong id="preview-Exp_Name">[Experiment Name]</strong></p>
+              </div>
+              
+              <div id="preview-assignment-section" class="hidden">
+                <p>Assignment on:</p>
+                <p><strong id="preview-Assignment_Name">[Assignment Title]</strong></p>
+              </div>
             </div>
-            <div style="grid-column: 1 / -1;">
-              <label for="Exp_Name">Experiment Name</label>
-              <input type="text" id="Exp_Name" placeholder="e.g. Study of RC Circuit">
+
+            <div class="preview-submission-details">
+              <div class="preview-field-group">
+                <span class="label">Course Code:</span>
+                <span class="value" id="preview-Course_Code">[Code]</span>
+              </div>
+              <div class="preview-field-group">
+                <span class="label">Course Title:</span>
+                <span class="value" id="preview-Course_Title">[Title]</span>
+              </div>
+
+              <div class="preview-field-group submitted-to">
+                <span class="label">Submitted To:</span>
+                <span class="value">
+                  <strong id="preview-Course_Teacher">[Teacher Name]</strong>
+                  <span id="preview-Course_Teacher_Details">[Teacher Designation]</span>
+                </span>
+              </div>
+
+              <div class="preview-field-group submitted-by">
+                <span class="label">Submitted By:</span>
+                <span class="value">
+                  <strong id="preview-Name">[Student Name]</strong>
+                  Reg No: <span id="preview-Reg_No">[Reg No]</span>
+                  <span id="preview-Group_No_Container" class="hidden">
+                    Group: <strong id="preview-Group_No">[Group]</strong>
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
-        <button type="submit">Generate Cover Page</button>
-      </form>
-      <div id="status"></div>
       <div class="converter">
         <p>Need PDF format? Use an online converter.</p>
         <a href="https://www.ilovepdf.com/word_to_pdf" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><button type="button" style="background: #28a745; margin: 0; width: auto; padding: 0.75rem 2rem;">Convert DOCX to PDF</button></a>
       </div>
       <p style="text-align:center; margin-top:2rem;"><a id="backButton">← Back to selection</a></p>
     </main>
-  </div>
-  
- <footer class="page-footer">
+    </div>
+ 
+  <footer class="page-footer">
     <p>Developed by <strong>Mubarok Hossen Kamil</strong> • EEE, SUST • Batch 2022</p>
-</footer>
+  </footer>
 
-  <!-- Libraries -->
   <script src="https://unpkg.com/pizzip@3.1.7/dist/pizzip.js"></script>
   <script src="https://unpkg.com/docxtemplater@3.30.1/build/docxtemplater.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Page containers
+      // === Page Containers ===
       const landingPage = document.getElementById('landingPage');
       const generatorPage = document.getElementById('generatorPage');
 
-      // Controls
+      // === Controls ===
       const choiceButtons = document.querySelectorAll('.selection-box');
       const backButton = document.getElementById('backButton');
       
-      // Form elements
+      // === Form Elements ===
       const form = document.getElementById('dataForm');
       const hiddenTemplateInput = document.getElementById('templateFile');
       const labFields = document.getElementById('labFields');
       const assignmentFields = document.getElementById('assignmentFields');
       const status = document.getElementById('status');
 
-      // Function to show the generator page
+      // === NEW: Preview Elements ===
+      const preview = {
+        deptName: document.getElementById('preview-Dept_Name'),
+        expNo: document.getElementById('preview-Exp_No'),
+        expName: document.getElementById('preview-Exp_Name'),
+        assignmentName: document.getElementById('preview-Assignment_Name'),
+        courseCode: document.getElementById('preview-Course_Code'),
+        courseTitle: document.getElementById('preview-Course_Title'),
+        courseTeacher: document.getElementById('preview-Course_Teacher'),
+        teacherDetails: document.getElementById('preview-Course_Teacher_Details'),
+        studentName: document.getElementById('preview-Name'),
+        regNo: document.getElementById('preview-Reg_No'),
+        groupNo: document.getElementById('preview-Group_No'),
+        groupNoContainer: document.getElementById('preview-Group_No_Container'),
+        labSection: document.getElementById('preview-lab-section'),
+        assignmentSection: document.getElementById('preview-assignment-section')
+      };
+
+      // === NEW: Update Preview Function ===
+      const updatePreview = () => {
+        // Get values from form
+        const data = {
+          Dept_Name: document.getElementById('Dept_Name').value,
+          Course_Code: document.getElementById('Course_Code').value,
+          Course_Title: document.getElementById('Course_Title').value,
+          Course_Teacher: document.getElementById('Course_Teacher').value,
+          Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value,
+          Reg_No: document.getElementById('Reg_No').value,
+          Name: document.getElementById('Name').value,
+          Exp_No: document.getElementById('Exp_No').value,
+          Group_No: document.getElementById('Group_No').value,
+          Exp_Name: document.getElementById('Exp_Name').value,
+          Assignment_Name: document.getElementById('Assignment_Name').value
+        };
+
+        // Update preview elements, using placeholder if empty
+        preview.deptName.textContent = data.Dept_Name || '[Department]';
+        preview.expNo.textContent = data.Exp_No || '[No]';
+        preview.expName.textContent = data.Exp_Name || '[Experiment Name]';
+        preview.assignmentName.textContent = data.Assignment_Name || '[Assignment Title]';
+        preview.courseCode.textContent = data.Course_Code || '[Code]';
+        preview.courseTitle.textContent = data.Course_Title || '[Title]';
+        preview.courseTeacher.textContent = data.Course_Teacher || '[Teacher Name]';
+        preview.teacherDetails.textContent = data.Course_Teacher_Details || '[Teacher Designation]';
+        preview.studentName.textContent = data.Name || '[Student Name]';
+        preview.regNo.textContent = data.Reg_No || '[Reg No]';
+        preview.groupNo.textContent = data.Group_No || '[Group]';
+
+        // Show/hide optional fields in preview
+        preview.teacherDetails.style.display = data.Course_Teacher_Details ? 'block' : 'none';
+        
+        // Show group number only if it's a lab report AND has a value
+        if (labFields.classList.contains('visible') && data.Group_No) {
+          preview.groupNoContainer.classList.remove('hidden');
+        } else {
+          preview.groupNoContainer.classList.add('hidden');
+        }
+      };
+
+      // === MODIFIED: Show Generator Function ===
       const showGenerator = (type) => {
         form.reset();
         status.innerHTML = '';
         status.style.backgroundColor = '';
+        
+        // Hide all form field groups and preview sections
         labFields.classList.remove('visible');
         assignmentFields.classList.remove('visible');
+        preview.labSection.classList.add('hidden');
+        preview.assignmentSection.classList.add('hidden');
 
         if (type === 'lab') {
           hiddenTemplateInput.value = 'lab-template.docx';
           labFields.classList.add('visible');
+          preview.labSection.classList.remove('hidden'); // Show lab preview
         } else if (type === 'assignment') {
           hiddenTemplateInput.value = 'Assignment-template.docx';
           assignmentFields.classList.add('visible');
+          preview.assignmentSection.classList.remove('hidden'); // Show assignment preview
         }
 
         landingPage.classList.add('hidden');
         generatorPage.classList.remove('hidden');
         window.scrollTo(0, 0);
+
+        updatePreview(); // Call once to set initial placeholder state
       };
 
-      // Function to show the landing page
+      // === MODIFIED: Show Landing Function ===
       const showLanding = () => {
         generatorPage.classList.add('hidden');
         landingPage.classList.remove('hidden');
         window.scrollTo(0, 0);
       };
+
+      // --- Event Listeners ---
 
       choiceButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -368,6 +619,12 @@
 
       backButton.addEventListener('click', showLanding);
 
+      // === NEW: Add event listeners to all form inputs ===
+      form.querySelectorAll('input[type="text"]').forEach(input => {
+        input.addEventListener('input', updatePreview);
+      });
+
+      // === UNCHANGED: Form Submit Logic ===
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         status.innerHTML = '<em>Generating your cover page...</em>';
@@ -376,10 +633,10 @@
 
         const templateFile = hiddenTemplateInput.value;
         if (!templateFile) {
-            status.innerHTML = 'Error: No template selected. Please go back.';
-            status.style.color = 'var(--error)';
-            status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
-            return;
+          status.innerHTML = 'Error: No template selected. Please go back.';
+          status.style.color = 'var(--error)';
+          status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
+          return;
         }
 
         const data = {
@@ -438,6 +695,5 @@
       });
     });
   </script>
-
-</body>
+  </body>
 </html>
