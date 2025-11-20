@@ -38,7 +38,7 @@
     height: auto;
   }
 
-  /* University and Department (UPDATED) */
+  /* University and Department */
   .univ {
     font-size: 27px;
     text-align: center;
@@ -71,6 +71,7 @@
     margin-bottom: 22px;
     text-align: center;
     font-weight: normal;
+    white-space: pre-wrap; /* NEW — preserve spaces & line breaks */
   }
   .course-block .bold {
     font-weight: bold;
@@ -87,7 +88,7 @@
     margin-bottom: 22px;
   }
 
-  /* NEW — Proper multi-line alignment for Experiment Name */
+  /* Multi-line aligned Experiment Name */
   .exp-wrap {
     display: flex;
     align-items: flex-start;
@@ -97,12 +98,14 @@
   .exp-wrap .label {
     width: 150px;
     flex-shrink: 0;
+    white-space: nowrap; /* NEW — prevents breaking "Experiment Name" */
   }
   .exp-wrap .value {
     flex: 1;
+    white-space: pre-wrap; /* keeps spacing from mobile input */
   }
 
-  /* Table (UPDATED) */
+  /* Table */
   table {
     width: 746px;
     height: 114px;
@@ -153,7 +156,7 @@
     <div>Group: {Group_No}</div>
     <div>Experiment No.: {Exp_No}</div>
 
-    <!-- Updated Multi-line Aligned Experiment Name -->
+    <!-- Multi-line aligned Experiment Name -->
     <div class="exp-wrap">
       <span class="label">Experiment Name:</span>
       <span class="value">{Exp_Name}</span>
