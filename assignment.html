@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assignment Cover Template</title>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Times New Roman", serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .page {
+    width: 918px;
+    height: 1188px;
+    padding: 108px 108px 43px 108px;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    position: relative;
+  }
+
+  /* Logo */
+  .logo {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .logo img {
+    display: block;
+    margin: 0 auto;
+    width: 110px;
+    height: auto;
+  }
+
+  /* University and Department */
+  .univ {
+    font-size: 27px;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 12px;
+  }
+  
+  .dept {
+    font-size: 27px;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 35px;
+  }
+
+  /* Assignment Title */
+  .doc-title {
+    font-size: 26px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 35px;
+  }
+
+  /* Course info */
+  .course-block {
+    text-align: center;
+    margin-bottom: 82px;
+  }
+  .course-block div {
+    font-size: 18px;
+    margin-bottom: 22px;
+    text-align: center;
+    font-weight: normal;
+  }
+  .course-block .bold {
+    font-weight: bold;
+  }
+
+  /* WRAPPED Assignment Name (new structure) */
+  .assignment-wrap {
+    display: flex;
+    align-items: flex-start;
+    font-size: 18px; /* same as before */
+    line-height: 26px;
+    margin-bottom: 115px; /* SAME spacing as before */
+  }
+  .assignment-wrap .label {
+    width: 150px; /* fixed width so wrapped text aligns perfectly */
+    flex-shrink: 0;
+  }
+  .assignment-wrap .value {
+    flex: 1;
+  }
+
+  /* Table */
+  table {
+    width: 746px;
+    height: 128px;
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+
+  th, td {
+    border: 1px solid black;
+    width: 50%;
+    height: 64px;
+    font-size: 19px;
+    text-align: center;
+    font-weight: normal;
+  }
+
+  td.bold, th.bold {
+    font-weight: bold;
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="sust_logo.png" alt="SUST Logo">
+  </div>
+
+  <!-- University and Department -->
+  <div class="univ">Shahjalal University of Science and Technology</div>
+  <div class="dept">Department of {Dept_Name}</div>
+
+  <!-- Assignment Title -->
+  <div class="doc-title">Assignment</div>
+
+  <!-- Course Information -->
+  <div class="course-block">
+    <div class="bold">Course Code: {Course_Code}</div>
+    <div class="bold">Course Name: {Course_Title}</div>
+    <div>Course Teacher: {Course_Teacher}</div>
+    <div>{Course_Teacher_Details}</div>
+  </div>
+
+  <!-- WRAPPED Assignment Name -->
+  <div class="assignment-wrap">
+    <span class="label">Assignment Title:</span>
+    <span class="value">{Assignment_Name}</span>
+  </div>
+
+  <!-- Table -->
+  <table>
+    <tr>
+      <th>Reg. Number</th>
+      <th>Name</th>
+    </tr>
+    <tr>
+      <td class="bold">{Reg_No}</td>
+      <td class="bold">{Name}</td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SUST Cover Page Generator</title>
   <meta name="description" content="Official SUST Cover Sheet Generator • Shahjalal University of Science and Technology">
-  <meta name="keywords" content="SUST cover page, SUST assignment cover page, SUST cover sheet, SUST lab report cover page generator, Shahjalal University of Science and Technology, SUST pdf generator, SUST Cover Page Generator, SUST cover page generator">
+  <meta name="keywords" content="SUST cover page, SUST assignment cover page, SUST cover sheet, SUST lab report cover page generator, Shahjalal University of Science and Technology, SUST form, SUST template, SUST pdf generator">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
   <!-- Open Graph (Facebook / LinkedIn preview) -->
@@ -134,6 +134,8 @@
     input:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
     .field-group { padding: 1.5625rem; background: #f9fbfc; border-radius: 0.875rem; border: 1.5px dashed var(--border); margin-top: 1.5625rem; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; visibility: hidden; }
     .field-group.visible { opacity: 1; max-height: 500px; border-style: solid; border-color: var(--sust-gold); background: #fefef9; visibility: visible; }
+    .button-group { display: flex; gap: 1rem; margin-top: 2.1875rem; }
+    .button-group button { flex: 1; margin-top: 0; }
     button { width: 100%; background: var(--sust-blue); color: white; padding: 1.125rem; border: none; border-radius: 0.75rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 2.1875rem; }
     button:hover:not(:disabled) { background: #002b55; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 51, 102, 0.3); }
     #status { margin-top: 1.5rem; text-align: center; font-weight: 500; padding: 0.875rem; border-radius: 0.625rem; min-height: 3.5rem; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
@@ -155,6 +157,7 @@
         .header-text p { font-size: 0.8rem; }
         .landing-main { padding: 2.5rem 1rem; }
         .generator-main { padding: 2rem 1rem; }
+        .button-group { flex-direction: column; }
     }
     @media (min-width: 768px) {
       .selection-grid { grid-template-columns: 1fr 1fr; }
@@ -229,7 +232,9 @@
       <h3>Generate Your Official Cover Sheet</h3>
       <form id="dataForm">
         <!-- Hidden input to store the template file name -->
-        <input type="hidden" id="templateFile" value="">
+        <input type="hidden" id="templateDocxFile" value="">
+        <input type="hidden" id="templateHtmlFile" value="">
+
 
         <div class="form-grid">
           <!-- === THIS HTML BLOCK IS UPDATED === -->
@@ -293,13 +298,14 @@
         </div>
 
         <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
-        <button type="submit">Generate Cover Page</button>
+        
+        <div class="button-group">
+          <button type="submit" id="generateDocxButton">Generate DOCX </button>
+          <button type="button" id="generatePdfButton" style="background: #e74c3c;">Generate PDF</button>
+        </div>
       </form>
       <div id="status"></div>
-      <div class="converter">
-        <p>Need PDF format? Use an online converter.</p>
-        <a href="https://www.ilovepdf.com/word_to_pdf" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><button type="button" style="background: #28a745; margin: 0; width: auto; padding: 0.75rem 2rem;">Convert DOCX to PDF</button></a>
-      </div>
+      
       <p style="text-align:center; margin-top:2rem;"><a id="backButton">← Back to selection</a></p>
     </main>
   </div>
@@ -312,6 +318,9 @@
   <script src="https://unpkg.com/pizzip@3.1.7/dist/pizzip.js"></script>
   <script src="https://unpkg.com/docxtemplater@3.30.1/build/docxtemplater.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -325,10 +334,14 @@
       
       // Form elements
       const form = document.getElementById('dataForm');
-      const hiddenTemplateInput = document.getElementById('templateFile');
+      const hiddenTemplateDocxInput = document.getElementById('templateDocxFile');
+      const hiddenTemplateHtmlInput = document.getElementById('templateHtmlFile');
       const labFields = document.getElementById('labFields');
       const assignmentFields = document.getElementById('assignmentFields');
       const status = document.getElementById('status');
+      const generateDocxButton = document.getElementById('generateDocxButton');
+      const generatePdfButton = document.getElementById('generatePdfButton');
+
 
       // Function to show the generator page
       const showGenerator = (type) => {
@@ -339,10 +352,12 @@
         assignmentFields.classList.remove('visible');
 
         if (type === 'lab') {
-          hiddenTemplateInput.value = 'lab-template.docx';
+          hiddenTemplateDocxInput.value = 'lab-template.docx';
+          hiddenTemplateHtmlInput.value = 'lab_report.html';
           labFields.classList.add('visible');
         } else if (type === 'assignment') {
-          hiddenTemplateInput.value = 'Assignment-template.docx';
+          hiddenTemplateDocxInput.value = 'Assignment-template.docx';
+          hiddenTemplateHtmlInput.value = 'assignment.html';
           assignmentFields.classList.add('visible');
         }
 
@@ -367,21 +382,9 @@
 
       backButton.addEventListener('click', showLanding);
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        status.innerHTML = '<em>Generating your cover page...</em>';
-        status.style.color = 'var(--sust-blue)';
-        status.style.backgroundColor = '';
-
-        const templateFile = hiddenTemplateInput.value;
-        if (!templateFile) {
-            status.innerHTML = 'Error: No template selected. Please go back.';
-            status.style.color = 'var(--error)';
-            status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
-            return;
-        }
-
-        const data = {
+      // Helper to collect form data
+      const getFormData = () => {
+        return {
           Dept_Name: document.getElementById('Dept_Name').value.trim(),
           Course_Code: document.getElementById('Course_Code').value.trim(),
           Course_Title: document.getElementById('Course_Title').value.trim(),
@@ -396,10 +399,47 @@
           // Assignment Specific
           Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || ''
         };
+      };
+
+      const updateStatus = (message, type) => {
+        status.innerHTML = message;
+        if (type === 'success') {
+          status.style.color = 'var(--success)';
+          status.style.backgroundColor = 'rgba(45, 106, 79, 0.1)';
+        } else if (type === 'error') {
+          status.style.color = 'var(--error)';
+          status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
+        } else {
+          status.style.color = 'var(--sust-blue)';
+          status.style.backgroundColor = '';
+        }
+      };
+
+
+      // --- DOCX Generation ---
+      generateDocxButton.addEventListener('click', async (e) => {
+        e.preventDefault(); // Prevent default form submission
+        status.innerHTML = '<em>Generating DOCX cover page...</em>';
+        status.style.color = 'var(--sust-blue)';
+        status.style.backgroundColor = '';
+
+        const templateDocxFile = hiddenTemplateDocxInput.value;
+        if (!templateDocxFile) {
+            updateStatus('Error: No DOCX template selected. Please go back.', 'error');
+            return;
+        }
+
+        const data = getFormData();
+        if (!form.checkValidity()) {
+          form.reportValidity(); // Show native browser validation messages
+          updateStatus('Please fill in all required fields.', 'error');
+          return;
+        }
+
 
         try {
-          const response = await fetch(templateFile);
-          if (!response.ok) throw new Error('Template file not found. Ensure template files are in the correct directory.');
+          const response = await fetch(templateDocxFile);
+          if (!response.ok) throw new Error('DOCX template file not found. Ensure template files are in the correct directory.');
           
           const content = await response.arrayBuffer();
           const zip = new PizZip(content);
@@ -407,32 +447,127 @@
           doc.render(data);
 
           const blob = doc.getZip().generate({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-          const isLabReport = templateFile.includes('lab');
+          const isLabReport = templateDocxFile.includes('lab');
           const fileName = isLabReport
             ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.docx`
             : `Assignment_${data.Reg_No}_${data.Course_Code}.docx`;
 
           saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
 
-          status.innerHTML = 'Cover page generated & downloaded successfully!';
-          status.style.color = 'var(--success)';
-          status.style.backgroundColor = 'rgba(45, 106, 79, 0.1)';
+          updateStatus('DOCX cover page generated & downloaded successfully!', 'success');
 
-          // --- [START] ADDED FOR GOOGLE ANALYTICS EVENT TRACKING ---
           if (typeof gtag === 'function') {
             gtag('event', 'generate_cover_page', {
-              'document_type': isLabReport ? 'Lab Report' : 'Assignment',
+              'document_type': isLabReport ? 'Lab Report (DOCX)' : 'Assignment (DOCX)',
               'department': data.Dept_Name,
               'course_code': data.Course_Code
             });
           }
-          // --- [END] ADDED FOR GOOGLE ANALYTICS EVENT TRACKING ---
 
         } catch (err) {
           console.error(err);
-          status.innerHTML = 'Error: ' + err.message;
-          status.style.color = 'var(--error)';
-          status.style.backgroundColor = 'rgba(155, 29, 65, 0.1)';
+          updateStatus('Error generating DOCX: ' + err.message, 'error');
+        }
+      });
+
+      // --- PDF Generation ---
+      generatePdfButton.addEventListener('click', async (e) => {
+        e.preventDefault(); // Prevent default form submission
+        status.innerHTML = '<em>Generating PDF cover page...</em>';
+        status.style.color = 'var(--sust-blue)';
+        status.style.backgroundColor = '';
+
+        const templateHtmlFile = hiddenTemplateHtmlInput.value;
+        if (!templateHtmlFile) {
+            updateStatus('Error: No HTML template selected. Please go back.', 'error');
+            return;
+        }
+
+        const data = getFormData();
+        if (!form.checkValidity()) {
+          form.reportValidity(); // Show native browser validation messages
+          updateStatus('Please fill in all required fields.', 'error');
+          return;
+        }
+
+        try {
+          // 1. Fetch the HTML template
+          const response = await fetch(templateHtmlFile);
+          if (!response.ok) throw new Error('HTML template file not found. Ensure template files are in the correct directory.');
+          
+          let htmlContent = await response.text();
+
+          // 2. Replace placeholders in the HTML
+          for (const key in data) {
+            htmlContent = htmlContent.replace(new RegExp(`{${key}}`, 'g'), data[key]);
+          }
+
+          // 3. Create a temporary element to render the HTML
+          const tempDiv = document.createElement('div');
+          tempDiv.style.position = 'absolute';
+          tempDiv.style.left = '-9999px'; // Hide it off-screen
+          tempDiv.style.width = '918px'; // Corresponds to A4 width at 96dpi (8.5in * 96dpi + 2*1in margin * 96dpi)
+          document.body.appendChild(tempDiv);
+          tempDiv.innerHTML = htmlContent;
+
+          // Replace the sust_logo.png path if needed (e.g., if it's relative in HTML but needs to be absolute for html2canvas)
+          // This ensures html2canvas can find the image.
+          const imgElement = tempDiv.querySelector('.logo img');
+          if (imgElement && imgElement.src.includes('sust_logo.png') && !imgElement.src.startsWith('http')) {
+              imgElement.src = 'https://mubarokkamil.github.io/SUST-Cover-Page-Generator/sust_logo.png'; // Update to absolute path
+          }
+
+
+          // 4. Use html2canvas to convert the HTML to a canvas
+          const canvas = await html2canvas(tempDiv.querySelector('.page'), { 
+            scale: 2, // Increase scale for better resolution
+            useCORS: true // Required if images are from a different origin
+          });
+
+          // Remove the temporary element
+          document.body.removeChild(tempDiv);
+
+          // 5. Use jsPDF to create a PDF from the canvas
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'pt', 'a4'); // 'p' for portrait, 'pt' for points, 'a4' for A4 size
+
+          const imgData = canvas.toDataURL('image/png');
+          const imgWidth = 595.28; // A4 width in points
+          const pageHeight = 841.89; // A4 height in points
+          const imgHeight = canvas.height * imgWidth / canvas.width;
+          let heightLeft = imgHeight;
+          let position = 0;
+
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+
+          const isLabReport = templateHtmlFile.includes('lab');
+          const pdfFileName = isLabReport
+            ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.pdf`
+            : `Assignment_${data.Reg_No}_${data.Course_Code}.pdf`;
+
+          pdf.save(pdfFileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
+
+          updateStatus('PDF cover page generated & downloaded successfully!', 'success');
+
+          if (typeof gtag === 'function') {
+            gtag('event', 'generate_cover_page', {
+              'document_type': isLabReport ? 'Lab Report (PDF)' : 'Assignment (PDF)',
+              'department': data.Dept_Name,
+              'course_code': data.Course_Code
+            });
+          }
+
+        } catch (err) {
+          console.error(err);
+          updateStatus('Error generating PDF: ' + err.message, 'error');
         }
       });
     });
