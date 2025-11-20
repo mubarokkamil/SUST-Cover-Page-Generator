@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- FIX 1: Force the mobile browser to render the page as if it were a wide screen -->
+<meta name="viewport" content="width=1024, initial-scale=1.0">
 <title>Lab Report Cover Template</title>
 
 <style>
@@ -12,18 +14,24 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    height: 100vh;
+    /* Changed to min-height to allow scrolling on mobile */
+    min-height: 100vh;
     background-color: #f0f0f0;
+    /* Prevent mobile horizontal scroll on the body itself */
+    overflow-x: auto; 
   }
 
   .page {
-    width: 918px;
+    width: 918px; /* Fixed width for A4ish scaling */
     height: 1188px;
     padding: 108px 108px 43px 108px;
     box-sizing: border-box;
     background-color: #fff;
     box-shadow: 0 0 8px rgba(0,0,0,0.2);
     position: relative;
+    /* Ensure the page doesn't shrink on mobile */
+    flex-shrink: 0; 
+    margin: 20px auto;
   }
 
   /* Logo */
@@ -44,6 +52,7 @@
     text-align: center;
     font-weight: normal;
     margin-bottom: 12px;
+    white-space: nowrap; /* Keep title on one line */
   }
   
   .dept {
@@ -71,7 +80,6 @@
     margin-bottom: 22px;
     text-align: center;
     font-weight: normal;
-    white-space: pre-wrap; /* NEW — preserve spaces & line breaks */
   }
   .course-block .bold {
     font-weight: bold;
@@ -88,21 +96,25 @@
     margin-bottom: 22px;
   }
 
-  /* Multi-line aligned Experiment Name */
+  /* FIX 2 & 3: Multi-line alignment and preventing label overlap */
   .exp-wrap {
     display: flex;
     align-items: flex-start;
-    line-height: 28px;
+    line-height: 28px; /* Matches font line height */
     margin-bottom: 22px;
   }
+  
   .exp-wrap .label {
-    width: 150px;
-    flex-shrink: 0;
-    white-space: nowrap; /* NEW — prevents breaking "Experiment Name" */
+    /* Slightly increased width to ensure "Experiment Name:" fits comfortably */
+    width: 160px; 
+    flex-shrink: 0; /* Prevents the label from getting squashed */
+    white-space: nowrap; /* Forces "Experiment Name" to stay on one line */
   }
+  
   .exp-wrap .value {
     flex: 1;
-    white-space: pre-wrap; /* keeps spacing from mobile input */
+    /* Ensures the experiment name text wraps properly if it's very long */
+    word-wrap: break-word; 
   }
 
   /* Table */
@@ -133,6 +145,7 @@
 
   <!-- Logo -->
   <div class="logo">
+    <!-- Make sure your image path is correct -->
     <img src="sust_logo.png" alt="SUST Logo">
   </div>
 
@@ -156,7 +169,7 @@
     <div>Group: {Group_No}</div>
     <div>Experiment No.: {Exp_No}</div>
 
-    <!-- Multi-line aligned Experiment Name -->
+    <!-- Experiment Name Section -->
     <div class="exp-wrap">
       <span class="label">Experiment Name:</span>
       <span class="value">{Exp_Name}</span>
