@@ -21,8 +21,6 @@
   <meta name="twitter:description" content="Generate official SUST cover pages instantly—free for all SUST students.">
   <meta name="twitter:image" content="https://mubarokkamil.github.io/SUST-Cover-Page-Generator/sust_logo.png">
 
-  
-
   <!-- Canonical Link -->
   <link rel="canonical" href="https://mubarokkamil.github.io/SUST-Cover-Page-Generator/">
 
@@ -106,25 +104,6 @@
     .selection-box h3 { font-family: 'EB Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
     .selection-box span { font-size: 1rem; color: #4a5568; }
 
-    /* === Video Styles === */
-    .video-container {
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        margin: 3rem auto 0 auto; /* Adjusted margin to add space above */
-        border-radius: 0.75rem;
-        box-shadow: var(--shadow);
-    }
-    .video-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-    }
-
     /* === Generator Page Styles === */
     .generator-main { padding: 2.5rem 1.5rem; }
     .generator-main h3 { font-family: 'EB Garamond', serif; font-size: 1.75rem; color: var(--sust-navy); text-align: center; margin-bottom: 2.5rem; font-weight: 600; }
@@ -132,6 +111,9 @@
     label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2d3748; font-size: 0.9375rem; }
     input { width: 100%; padding: 1rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 0.9375rem; background: #fdfdfd; transition: all 0.3s ease; }
     input:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
+    /* Date input specific styling to match text inputs */
+    input[type="date"] { font-family: 'Inter', sans-serif; }
+    
     .field-group { padding: 1.5625rem; background: #f9fbfc; border-radius: 0.875rem; border: 1.5px dashed var(--border); margin-top: 1.5625rem; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; visibility: hidden; }
     .field-group.visible { opacity: 1; max-height: 500px; border-style: solid; border-color: var(--sust-gold); background: #fefef9; visibility: visible; }
     .button-group { display: flex; gap: 1rem; margin-top: 2.1875rem; }
@@ -139,7 +121,6 @@
     button { width: 100%; background: var(--sust-blue); color: white; padding: 1.125rem; border: none; border-radius: 0.75rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 2.1875rem; }
     button:hover:not(:disabled) { background: #002b55; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 51, 102, 0.3); }
     #status { margin-top: 1.5rem; text-align: center; font-weight: 500; padding: 0.875rem; border-radius: 0.625rem; min-height: 3.5rem; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
-    .converter { margin-top: 2.8rem; text-align: center; padding: 1.875rem; background: #f0f4f8; border-radius: 0.875rem; border: 1px solid #d0d7e0; }
     
     /* === Shared Footer === */
     .page-footer { text-align: center; padding: 2rem 1rem; color: #64748b; font-size: 0.875rem; }
@@ -221,8 +202,8 @@
     <header class="header">
       <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
       <div class="header-text">
-        <h1>Shahjalal University of Science & Technology</h1>
-        <p>Sylhet-3114, Bangladesh</p>
+        <h1>SUST Cover Page Generator</h1>
+        
       </div>
     </header>
     <main class="generator-main">
@@ -234,7 +215,7 @@
 
 
         <div class="form-grid">
-          <!-- === THIS HTML BLOCK IS UPDATED === -->
+          <!-- === Department List === -->
           <div>
             <label for="Dept_Name">Department</label>
             <input type="text" id="Dept_Name" list="dept-list" required placeholder="e.g. Electrical and Electronic Engineering">
@@ -275,6 +256,13 @@
           <div><label for="Course_Teacher_Details">Teacher Designation</label><input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST"></div>
           <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
           <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
+          
+          <!-- UPDATED: Date Picker -->
+          <div>
+              <label for="Submission_Date">Date of Submission</label>
+              <input type="date" id="Submission_Date" required>
+          </div>
+          
         </div>
 
         <div id="labFields" class="field-group">
@@ -382,8 +370,38 @@
 
       backButton.addEventListener('click', showLanding);
 
+      // === HELPER FUNCTION: Format Date from YYYY-MM-DD to "26th February, 2025" ===
+      const formatDateString = (dateStr) => {
+        if (!dateStr) return "";
+        // Split strictly by hyphen to avoid timezone shifts
+        const parts = dateStr.split("-");
+        const year = parts[0];
+        const monthIndex = parseInt(parts[1], 10) - 1; // 0-based index
+        const day = parseInt(parts[2], 10);
+
+        const months = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        
+        // Function to get ordinal suffix (st, nd, rd, th)
+        const getOrdinal = (n) => {
+            if (n > 3 && n < 21) return 'th';
+            switch (n % 10) {
+                case 1:  return "st";
+                case 2:  return "nd";
+                case 3:  return "rd";
+                default: return "th";
+            }
+        };
+
+        return `${day}${getOrdinal(day)} ${months[monthIndex]}, ${year}`;
+      };
+
       // Helper to collect form data
       const getFormData = () => {
+        const rawDate = document.getElementById('Submission_Date').value;
+        
         return {
           Dept_Name: document.getElementById('Dept_Name').value.trim(),
           Course_Code: document.getElementById('Course_Code').value.trim(),
@@ -392,6 +410,10 @@
           Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(),
           Reg_No: document.getElementById('Reg_No').value.trim(),
           Name: document.getElementById('Name').value.trim(),
+          
+          // Format the date before returning
+          Submission_Date: formatDateString(rawDate),
+          
           // Lab Specific
           Exp_No: document.getElementById('Exp_No')?.value.trim() || '',
           Group_No: document.getElementById('Group_No')?.value.trim() || '',
