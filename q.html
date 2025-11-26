@@ -402,8 +402,7 @@
         
         <!-- Main Generation Button -->
         <div class="button-container">
-          <!-- FIX APPLIED: Changed type="submit" to type="button" to prevent Facebook reload error -->
-          <button type="button" id="generateDocxButton">Generate Cover Page (DOCX)</button>
+          <button type="submit" id="generateDocxButton">Generate Cover Page (DOCX)</button>
         </div>
         
       </form>
@@ -595,7 +594,7 @@
       };
 
 
-      // --- DOCX Generation (UPDATED FOR FACEBOOK COMPATIBILITY) ---
+      // --- DOCX Generation ---
       generateDocxButton.addEventListener('click', async (e) => {
         e.preventDefault(); 
         status.innerHTML = '<em>Generating DOCX cover page...</em>';
@@ -608,14 +607,12 @@
             return;
         }
 
-        // VALIDATION: Manually check validity because button is type="button"
+        const data = getFormData();
         if (!form.checkValidity()) {
           form.reportValidity(); 
           updateStatus('Please fill in all required fields.', 'error');
           return;
         }
-
-        const data = getFormData();
 
         try {
           const response = await fetch(templateDocxFile);
@@ -628,28 +625,11 @@
 
           const blob = doc.getZip().generate({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
           const isLabReport = templateDocxFile.includes('lab');
-          let fileName = isLabReport
+          const fileName = isLabReport
             ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.docx`
             : `Assignment_${data.Reg_No}_${data.Course_Code}.docx`;
 
-          // Clean filename
-          fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
-
-          // FIX APPLIED: Use Anchor Tag method instead of FileSaver for Facebook support
-          const downloadUrl = URL.createObjectURL(blob);
-          const downloadLink = document.createElement('a');
-          downloadLink.href = downloadUrl;
-          downloadLink.download = fileName;
-          
-          // Append to body (required for Firefox/Facebook webview), click, then remove
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          
-          // Cleanup
-          setTimeout(() => {
-              document.body.removeChild(downloadLink);
-              URL.revokeObjectURL(downloadUrl);
-          }, 100);
+          saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
 
           updateStatus('DOCX cover page generated & downloaded successfully!', 'success');
 
