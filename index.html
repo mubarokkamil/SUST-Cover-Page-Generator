@@ -148,8 +148,8 @@
     .generator-main h3 { font-family: 'EB Garamond', serif; font-size: 1.75rem; color: var(--sust-navy); text-align: center; margin-bottom: 2.5rem; font-weight: 600; }
     .form-grid { display: grid; grid-template-columns: 1fr; gap: 1.375rem; }
     label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #2d3748; font-size: 0.9375rem; }
-    input { width: 100%; padding: 1rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 0.9375rem; background: #fdfdfd; transition: all 0.3s ease; }
-    input:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
+    input, select { width: 100%; padding: 1rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 0.9375rem; background: #fdfdfd; transition: all 0.3s ease; }
+    input:focus, select:focus { outline: none; border-color: var(--sust-gold); box-shadow: 0 0 0 0.3125rem rgba(212, 175, 55, 0.15); background: white; }
     input[type="date"] { font-family: 'Inter', sans-serif; }
     
     .field-group { padding: 1.5625rem; background: #f9fbfc; border-radius: 0.875rem; border: 1.5px dashed var(--border); margin-top: 1.5625rem; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; visibility: hidden; }
@@ -203,6 +203,32 @@
     .back-link { cursor: pointer; margin-top: 1.5rem; display: inline-block; color: #64748b; transition: color 0.2s; }
     .back-link:hover { color: var(--sust-blue); }
 
+    /* === TEACHER MODAL STYLES === */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5); z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: all 0.3s;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-box {
+      background: white; width: 90%; max-width: 450px;
+      padding: 2rem; border-radius: 1rem;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      transform: translateY(20px); transition: transform 0.3s;
+      text-align: center;
+    }
+    .modal-overlay.active .modal-box { transform: translateY(0); }
+    .modal-title { font-family: 'EB Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem; color: var(--sust-navy); }
+    .modal-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    .modal-btn {
+      padding: 0.8rem; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer;
+    }
+    .btn-primary { background: var(--sust-blue); color: white; }
+    .btn-outline { background: transparent; border: 2px solid var(--sust-blue); color: var(--sust-blue); }
+    .btn-outline:hover { background: #f0f7ff; }
+    
+    .modal-select-container { margin-top: 1.5rem; text-align: left; }
 
     /* === Responsive Adjustments === */
     @media (max-width: 480px) {
@@ -213,6 +239,7 @@
         .header-text p { font-size: 0.8rem; }
         .landing-main { padding: 2.5rem 1rem; }
         .generator-main { padding: 2rem 1rem; }
+        .modal-btn-grid { grid-template-columns: 1fr; }
     }
     @media (min-width: 768px) {
       .selection-grid { grid-template-columns: 1fr 1fr; }
@@ -334,7 +361,7 @@
         <div class="form-grid">
           <!-- === Department List === -->
           <div>
-            <label for="Dept_Name">Department</label>
+            <label for="Dept_Name">Student Department</label>
             <input type="text" id="Dept_Name" list="dept-list" required placeholder="e.g. Electrical and Electronic Engineering">
             <datalist id="dept-list">
               <option value="Anthropology">
@@ -363,13 +390,23 @@
               <option value="Public Administration">
               <option value="Social Work">
               <option value="Sociology">
+              <option value="Software Engineering">
               <option value="Statistics">
             </datalist>
           </div>
           <!-- ==================================== -->
           <div><label for="Course_Code">Course Code</label><input type="text" id="Course_Code" required placeholder="e.g. EEE 322"></div>
           <div><label for="Course_Title">Course Title</label><input type="text" id="Course_Title" required placeholder="e.g. Digital Signal Processing"></div>
-          <div><label for="Course_Teacher">Course Teacher</label><input type="text" id="Course_Teacher" required placeholder="e.g. Dr. Muhammad Mostafa Amir Faisal"></div>
+          
+          <!-- UPDATED COURSE TEACHER SECTION -->
+          <div>
+            <label for="Course_Teacher">Course Teacher <span id="teacher-source-label" style="font-size:0.75rem; color:#666; font-weight:400;">(Select or Type)</span></label>
+            <input type="text" id="Course_Teacher" list="teacher-names-list" required placeholder="Select teacher or type name..." autocomplete="off">
+            <datalist id="teacher-names-list">
+               <!-- Populated by JS -->
+            </datalist>
+          </div>
+          
           <div><label for="Course_Teacher_Details">Teacher Designation</label><input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST"></div>
           <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
           <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
@@ -423,6 +460,32 @@
     </main>
   </div>
   
+  <!-- TEACHER DEPT SELECTION MODAL -->
+  <div id="teacherModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 class="modal-title">Select Teacher's Department</h3>
+      <p>Is the course teacher from your department or another department?</p>
+      
+      <div class="modal-btn-grid" id="initialModalBtns">
+        <button type="button" class="modal-btn btn-primary" id="btnSameDept">My Department</button>
+        <button type="button" class="modal-btn btn-outline" id="btnOtherDept">Other Department</button>
+      </div>
+
+      <!-- Hidden Select for Other Dept -->
+      <div id="otherDeptSelection" class="modal-select-container hidden">
+        <label for="modalDeptSelect">Choose Department:</label>
+        <select id="modalDeptSelect">
+          <option value="">-- Select Department --</option>
+          <!-- Will be populated from datalist -->
+        </select>
+        <div style="margin-top:1rem; display:flex; gap:1rem;">
+           <button type="button" class="modal-btn btn-outline" id="btnBackToModal" style="flex:1;">Back</button>
+           <button type="button" class="modal-btn btn-primary" id="btnConfirmDept" style="flex:1;">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
  <footer class="page-footer">
     <p>Developed by <strong>Mubarok Hossen Kamil</strong> • EEE, SUST • Session 2022-23</p>
 </footer>
@@ -441,8 +504,8 @@
       const generatorPage = document.getElementById('generatorPage');
 
       // Controls
-      const categoryButtons = document.querySelectorAll('.selection-box'); // Landing page buttons
-      const templateButtons = document.querySelectorAll('.template-img-box'); // Template selection buttons
+      const categoryButtons = document.querySelectorAll('.selection-box'); 
+      const templateButtons = document.querySelectorAll('.template-img-box'); 
       const backLinks = document.querySelectorAll('.back-link');
       
       // Form elements
@@ -452,7 +515,34 @@
       const assignmentFields = document.getElementById('assignmentFields');
       const status = document.getElementById('status');
       const generateDocxButton = document.getElementById('generateDocxButton');
+      
+      // Teacher Logic Elements
+      const courseTeacherInput = document.getElementById('Course_Teacher');
+      const studentDeptInput = document.getElementById('Dept_Name');
+      const teacherDatalist = document.getElementById('teacher-names-list');
+      const teacherModal = document.getElementById('teacherModal');
+      const btnSameDept = document.getElementById('btnSameDept');
+      const btnOtherDept = document.getElementById('btnOtherDept');
+      const otherDeptSelection = document.getElementById('otherDeptSelection');
+      const initialModalBtns = document.getElementById('initialModalBtns');
+      const modalDeptSelect = document.getElementById('modalDeptSelect');
+      const btnConfirmDept = document.getElementById('btnConfirmDept');
+      const btnBackToModal = document.getElementById('btnBackToModal');
+      const teacherSourceLabel = document.getElementById('teacher-source-label');
 
+      let allTeachersData = {};
+      let teacherSourceSelected = false; // Flag to track if user has already chosen source
+
+      // --- Fetch Teacher Data ---
+      fetch('./data/teachers.json')
+        .then(response => response.json())
+        .then(data => {
+            allTeachersData = data;
+        })
+        .catch(error => {
+            console.error('Error loading teachers:', error);
+            // Fallback: If file missing, just let them type
+        });
 
       // --- Navigation Functions ---
 
@@ -479,17 +569,19 @@
         window.scrollTo(0, 0);
       }
 
-      // Function to show the generator page
       function showGenerator(type, templateFile) {
         hideAllPages();
         form.reset();
         status.innerHTML = '';
         status.style.backgroundColor = '';
         
-        // Set the chosen template file
+        // Reset Teacher Logic
+        teacherSourceSelected = false; 
+        teacherDatalist.innerHTML = ''; 
+        teacherSourceLabel.innerText = '(Select or Type)';
+        
         hiddenTemplateDocxInput.value = templateFile;
 
-        // Toggle fields based on type
         labFields.classList.remove('visible');
         assignmentFields.classList.remove('visible');
 
@@ -505,7 +597,6 @@
 
       // --- Event Listeners ---
 
-      // 1. Landing Page Category Selection
       categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
           const category = button.getAttribute('data-category');
@@ -513,21 +604,113 @@
         });
       });
 
-      // 2. Template Image Selection
       templateButtons.forEach(button => {
           button.addEventListener('click', () => {
-              const type = button.getAttribute('data-type'); // 'lab' or 'assignment'
-              const file = button.getAttribute('data-file'); // 'lab-template.docx', etc.
+              const type = button.getAttribute('data-type'); 
+              const file = button.getAttribute('data-file'); 
               showGenerator(type, file);
           });
       });
 
-      // 3. Back Buttons
       backLinks.forEach(link => {
           link.addEventListener('click', (e) => {
-              // Simply go back to landing page for simplicity in this flow
               showLanding(); 
           });
+      });
+      
+      // --- Teacher Modal Logic ---
+      
+      // 1. Trigger when user clicks the Course Teacher input
+      courseTeacherInput.addEventListener('click', () => {
+         // If we haven't selected a source yet, trigger modal
+         if (!teacherSourceSelected) {
+             courseTeacherInput.blur(); // Remove focus so they can't type yet
+             teacherModal.classList.add('active');
+             
+             // Reset Modal State
+             initialModalBtns.classList.remove('hidden');
+             otherDeptSelection.classList.add('hidden');
+             
+             // Populate dropdown in modal with departments if empty
+             if (modalDeptSelect.options.length <= 1) {
+                 const depts = document.querySelectorAll('#dept-list option');
+                 depts.forEach(opt => {
+                     const el = document.createElement('option');
+                     el.value = opt.value;
+                     el.innerText = opt.value;
+                     modalDeptSelect.appendChild(el);
+                 });
+             }
+         }
+      });
+      
+      // 2. Option: Same Department
+      btnSameDept.addEventListener('click', () => {
+          const myDept = studentDeptInput.value;
+          if(!myDept) {
+              alert("Please enter your Student Department first.");
+              teacherModal.classList.remove('active');
+              studentDeptInput.focus();
+              return;
+          }
+          populateTeachers(myDept);
+          teacherSourceLabel.innerText = `(from ${myDept})`;
+          teacherSourceSelected = true;
+          teacherModal.classList.remove('active');
+          courseTeacherInput.focus();
+      });
+      
+      // 3. Option: Other Department
+      btnOtherDept.addEventListener('click', () => {
+          initialModalBtns.classList.add('hidden');
+          otherDeptSelection.classList.remove('hidden');
+      });
+      
+      // 4. Back button in Other Dept view
+      btnBackToModal.addEventListener('click', () => {
+          otherDeptSelection.classList.add('hidden');
+          initialModalBtns.classList.remove('hidden');
+      });
+      
+      // 5. Confirm Other Department
+      btnConfirmDept.addEventListener('click', () => {
+          const selectedDept = modalDeptSelect.value;
+          if(!selectedDept) {
+              alert("Please select a department.");
+              return;
+          }
+          populateTeachers(selectedDept);
+          teacherSourceLabel.innerText = `(from ${selectedDept})`;
+          teacherSourceSelected = true;
+          teacherModal.classList.remove('active');
+          courseTeacherInput.focus();
+      });
+      
+      // Helper: Populate Datalist
+      function populateTeachers(deptName) {
+          teacherDatalist.innerHTML = ''; // Clear previous
+          const teachers = allTeachersData[deptName];
+          
+          if (teachers && teachers.length > 0) {
+              teachers.forEach(name => {
+                  const option = document.createElement('option');
+                  option.value = name;
+                  teacherDatalist.appendChild(option);
+              });
+          } else {
+              // No teachers found for this dept in JSON
+              console.log('No teachers found for ' + deptName);
+          }
+      }
+      
+      // Reset flag if user changes their own department? 
+      // Optional: keep it simple. If they change student dept, they might want to re-trigger logic.
+      studentDeptInput.addEventListener('change', () => {
+          // If they haven't picked a teacher yet, reset logic
+          if(courseTeacherInput.value === '') {
+              teacherSourceSelected = false;
+              teacherDatalist.innerHTML = '';
+          }
       });
 
 
