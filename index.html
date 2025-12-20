@@ -112,7 +112,7 @@
     .selection-box h3 { font-family: 'EB Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
     .selection-box span { font-size: 1rem; color: #4a5568; }
 
-    /* === Template Selection Styles (New) === */
+    /* === Template Selection Styles === */
     .template-img-box {
       cursor: pointer;
       border: 2px solid var(--border);
@@ -155,6 +155,12 @@
     .field-group { padding: 1.5625rem; background: #f9fbfc; border-radius: 0.875rem; border: 1.5px dashed var(--border); margin-top: 1.5625rem; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; visibility: hidden; }
     .field-group.visible { opacity: 1; max-height: 500px; border-style: solid; border-color: var(--sust-gold); background: #fefef9; visibility: visible; }
     
+    /* Group Member Inputs */
+    .group-member-row {
+        display: flex; gap: 1rem; align-items: center; margin-bottom: 0.8rem;
+    }
+    .group-member-row input { margin-bottom: 0; }
+
     /* Generator Button */
     .button-container { margin-top: 2.1875rem; text-align: center; }
     button { width: 100%; background: var(--sust-blue); color: white; padding: 1.125rem; border: none; border-radius: 0.75rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
@@ -294,55 +300,44 @@
     </main>
   </div>
 
-  <!-- 2. Lab Template Selection Page (Hidden by default) -->
-  <div id="labTemplatePage" class="page-container hidden">
+  <!-- 2. Submission Type Selection (Individual vs Group) -->
+  <div id="submissionTypePage" class="page-container hidden">
+      <header class="header">
+        <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
+        <div class="header-text"><h1>Submission Type</h1></div>
+      </header>
+      <main class="landing-main">
+          <h2>Select Submission Mode</h2>
+          <p>Are you submitting individually or as a group?</p>
+          <div class="selection-grid">
+              <div class="selection-box" data-submission="individual">
+                  <h3>Individual Submission</h3>
+                  <span>Single student submission.</span>
+              </div>
+              <div class="selection-box" data-submission="group">
+                  <h3>Group-Wise Submission</h3>
+                  <span>For group projects/labs with multiple members.</span>
+              </div>
+          </div>
+          <a class="back-link" data-target="landing">← Back to home</a>
+      </main>
+  </div>
+
+  <!-- 3. Dynamic Template Selection Page (Unified) -->
+  <div id="templateSelectionPage" class="page-container hidden">
     <header class="header">
       <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
       <div class="header-text"><h1>Select Design</h1></div>
     </header>
     <main class="landing-main">
-        <h2>Choose Lab Report Template</h2>
-        <p>Select the design you prefer for your lab report.</p>
-        <div class="selection-grid">
-            <!-- Template 1 -->
-            <div class="template-img-box" data-type="lab" data-file="lab-template.docx">
-                <img src="lab-template.jpg" alt="Lab Template 1 Preview">
-                <div class="template-label">Design 1</div>
-            </div>
-            <!-- Template 2 -->
-            <div class="template-img-box" data-type="lab" data-file="lab-template-2.docx">
-                <img src="lab-template-2.jpg" alt="Lab Template 2 Preview">
-                <div class="template-label">Design 2</div>
-            </div>
-        </div>
-        <a class="back-link" data-target="landing">← Back to categories</a>
+        <h2 id="templatePageTitle">Choose Template</h2>
+        <p>Select the design you prefer.</p>
+        <!-- Grid populated by JS -->
+        <div class="selection-grid" id="templateGrid"></div>
+        <a class="back-link" data-target="submissionType">← Back to submission type</a>
     </main>
   </div>
 
-  <!-- 3. Assignment Template Selection Page (Hidden by default) -->
-  <div id="assignmentTemplatePage" class="page-container hidden">
-    <header class="header">
-        <img src="sust_logo.png" alt="SUST Logo" class="header-logo">
-        <div class="header-text"><h1>Select Design</h1></div>
-      </header>
-      <main class="landing-main">
-          <h2>Choose Assignment Template</h2>
-          <p>Select the design you prefer for your assignment.</p>
-          <div class="selection-grid">
-              <!-- Template 1 -->
-              <div class="template-img-box" data-type="assignment" data-file="Assignment-template.docx">
-                  <img src="Assignment-template.jpg" alt="Assignment Template 1 Preview">
-                  <div class="template-label">Design 1</div>
-              </div>
-              <!-- Template 2 -->
-              <div class="template-img-box" data-type="assignment" data-file="Assignment-template-2.docx">
-                  <img src="Assignment-template-2.jpg" alt="Assignment Template 2 Preview">
-                  <div class="template-label">Design 2</div>
-              </div>
-          </div>
-          <a class="back-link" data-target="landing">← Back to categories</a>
-      </main>
-  </div>
 
   <!-- 4. Generator Page Section (Initially Hidden) -->
   <div id="generatorPage" class="page-container hidden">
@@ -353,7 +348,7 @@
       </div>
     </header>
     <main class="generator-main">
-      <h3>Generate Your Official Cover Sheet</h3>
+      <h3 id="formTitle">Generate Cover Sheet</h3>
       <form id="dataForm">
         <!-- Hidden input to store the template file name -->
         <input type="hidden" id="templateDocxFile" value="">
@@ -408,8 +403,23 @@
           </div>
           
           <div><label for="Course_Teacher_Details">Teacher Designation</label><input type="text" id="Course_Teacher_Details" placeholder="e.g. Professor, Dept. of EEE, SUST"></div>
-          <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
-          <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
+          
+          <!-- INDIVIDUAL STUDENT INFO -->
+          <div id="individual-fields" class="form-grid" style="grid-column: 1 / -1; display: contents;">
+             <!-- Added required to HTML so they work when enabled -->
+             <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
+             <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
+          </div>
+
+          <!-- GROUP INFO (Replaces Indiv Fields) -->
+          <div id="group-fields" class="hidden" style="grid-column: 1 / -1; background: #fffbeb; border: 1px solid #fcd34d; padding: 1.5rem; border-radius: 0.75rem;">
+              <label for="memberCount" style="color: #92400e; font-weight: 600;">How many members are in your group?</label>
+              <input type="number" id="memberCount" min="1" value="2" required style="border-color: #fcd34d;">
+              
+              <div id="groupMembersContainer" style="margin-top: 1rem;">
+                  <!-- Dynamic Rows -->
+              </div>
+          </div>
           
           <!-- Date Picker -->
           <div>
@@ -426,7 +436,7 @@
               <input type="text" id="Exp_No" placeholder="e.g. 01">
             </div>
             <div>
-              <label for="Group_No">Group No</label>
+              <label for="Group_No">Group No (Lab Group)</label>
               <input type="text" id="Group_No" placeholder="e.g. Group A">
             </div>
             <div style="grid-column: 1 / -1;">
@@ -436,7 +446,19 @@
           </div>
         </div>
 
-        <div id="assignmentFields" class="field-group"><div class="form-grid"><div style="grid-column: 1 / -1;"><label for="Assignment_Name">Assignment Title</label><input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform"></div></div></div>
+        <!-- Assignment Fields including Group No for Assignment -->
+        <div id="assignmentFields" class="field-group">
+          <div class="form-grid">
+            <div id="assignmentGroupInputDiv" class="hidden">
+               <label for="Assignment_Group_No">Group No</label>
+               <input type="text" id="Assignment_Group_No" placeholder="e.g. Group 05">
+            </div>
+            <div style="grid-column: 1 / -1;">
+               <label for="Assignment_Name">Assignment Title</label>
+               <input type="text" id="Assignment_Name" placeholder="e.g. Assignment on Fourier Transform">
+            </div>
+          </div>
+        </div>
         
         <!-- Main Generation Button -->
         <div class="button-container">
@@ -454,7 +476,7 @@
       
       <!-- Back to Start -->
       <div style="text-align: center;">
-          <a class="back-link" data-target="landing">← Back to selection</a>
+          <a class="back-link" data-target="templateSelection">← Back to templates</a>
       </div>
 
     </main>
@@ -499,20 +521,28 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Pages
       const landingPage = document.getElementById('landingPage');
-      const labTemplatePage = document.getElementById('labTemplatePage');
-      const assignmentTemplatePage = document.getElementById('assignmentTemplatePage');
+      const submissionTypePage = document.getElementById('submissionTypePage');
+      const templateSelectionPage = document.getElementById('templateSelectionPage');
       const generatorPage = document.getElementById('generatorPage');
 
       // Controls
-      const categoryButtons = document.querySelectorAll('.selection-box'); 
-      const templateButtons = document.querySelectorAll('.template-img-box'); 
+      const categoryButtons = document.querySelectorAll('.selection-box[data-category]'); 
+      const submissionTypeButtons = document.querySelectorAll('.selection-box[data-submission]');
       const backLinks = document.querySelectorAll('.back-link');
+      
+      // Template Grid
+      const templateGrid = document.getElementById('templateGrid');
       
       // Form elements
       const form = document.getElementById('dataForm');
       const hiddenTemplateDocxInput = document.getElementById('templateDocxFile');
       const labFields = document.getElementById('labFields');
       const assignmentFields = document.getElementById('assignmentFields');
+      const assignmentGroupInputDiv = document.getElementById('assignmentGroupInputDiv');
+      const individualFields = document.getElementById('individual-fields');
+      const groupFields = document.getElementById('group-fields');
+      const memberCountInput = document.getElementById('memberCount');
+      const groupMembersContainer = document.getElementById('groupMembersContainer');
       const status = document.getElementById('status');
       const generateDocxButton = document.getElementById('generateDocxButton');
       
@@ -530,26 +560,45 @@
       const btnBackToModal = document.getElementById('btnBackToModal');
       const teacherSourceLabel = document.getElementById('teacher-source-label');
 
+      // State
       let allTeachersData = {};
-      let teacherSourceSelected = false; // Flag to track if user has already chosen source
+      let teacherSourceSelected = false;
+      let currentCategory = 'lab'; 
+      let currentSubmissionType = 'individual'; 
 
-      // --- Fetch Teacher Data ---
+      // Template Data Structure
+      const templateData = {
+          lab: {
+              individual: [
+                  { file: 'lab-template.docx', img: 'lab-template.jpg', label: 'Lab Design 1' },
+                  { file: 'lab-template-2.docx', img: 'lab-template-2.jpg', label: 'Lab Design 2' }
+              ],
+              group: [
+                  { file: 'Grouped-Lab-template.docx', img: 'Grouped-Lab-template.jpg', label: 'Group Lab Design 1' },
+                  { file: 'Grouped-Lab-template-2.docx', img: 'Grouped-Lab-template-2.jpg', label: 'Group Lab Design 2' }
+              ]
+          },
+          assignment: {
+              individual: [
+                  { file: 'Assignment-template.docx', img: 'Assignment-template.jpg', label: 'Assignment Design 1' },
+                  { file: 'Assignment-template-2.docx', img: 'Assignment-template-2.jpg', label: 'Assignment Design 2' }
+              ],
+              group: [
+                  { file: 'Grouped-Assignment-template.docx', img: 'Grouped-Assignment-template.jpg', label: 'Group Assignment Design 1' },
+                  { file: 'Grouped-Assignment-template-2.docx', img: 'Grouped-Assignment-template-2.jpg', label: 'Group Assignment Design 2' }
+              ]
+          }
+      };
+
       fetch('./data/teachers.json')
         .then(response => response.json())
-        .then(data => {
-            allTeachersData = data;
-        })
-        .catch(error => {
-            console.error('Error loading teachers:', error);
-            // Fallback: If file missing, just let them type
-        });
-
-      // --- Navigation Functions ---
+        .then(data => { allTeachersData = data; })
+        .catch(error => { console.error('Error loading teachers:', error); });
 
       function hideAllPages() {
         landingPage.classList.add('hidden');
-        labTemplatePage.classList.add('hidden');
-        assignmentTemplatePage.classList.add('hidden');
+        submissionTypePage.classList.add('hidden');
+        templateSelectionPage.classList.add('hidden');
         generatorPage.classList.add('hidden');
       }
 
@@ -559,79 +608,162 @@
         window.scrollTo(0, 0);
       }
 
-      function showTemplateSelection(category) {
-        hideAllPages();
-        if (category === 'lab') {
-            labTemplatePage.classList.remove('hidden');
-        } else if (category === 'assignment') {
-            assignmentTemplatePage.classList.remove('hidden');
-        }
-        window.scrollTo(0, 0);
+      function showSubmissionType() {
+          hideAllPages();
+          submissionTypePage.classList.remove('hidden');
+          window.scrollTo(0, 0);
       }
 
-      function showGenerator(type, templateFile) {
+      function renderTemplates() {
+          templateGrid.innerHTML = '';
+          const options = templateData[currentCategory][currentSubmissionType];
+          
+          if(options && options.length > 0) {
+              options.forEach(tpl => {
+                  const div = document.createElement('div');
+                  div.className = 'template-img-box';
+                  div.setAttribute('data-file', tpl.file);
+                  
+                  div.innerHTML = `
+                      <img src="${tpl.img}" alt="${tpl.label}">
+                      <div class="template-label">${tpl.label}</div>
+                  `;
+                  
+                  div.addEventListener('click', () => {
+                      showGenerator(tpl.file);
+                  });
+                  templateGrid.appendChild(div);
+              });
+          } else {
+              templateGrid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">No templates found for this selection.</p>';
+          }
+      }
+
+      function showTemplateSelection() {
+          hideAllPages();
+          renderTemplates();
+          document.getElementById('templatePageTitle').innerText = 
+            `Choose ${currentSubmissionType === 'group' ? 'Group' : ''} ${currentCategory === 'lab' ? 'Lab' : 'Assignment'} Template`;
+          templateSelectionPage.classList.remove('hidden');
+          window.scrollTo(0, 0);
+      }
+
+      function updateGroupInputs() {
+          groupMembersContainer.innerHTML = '';
+          const val = memberCountInput.value;
+          const count = parseInt(val);
+          
+          if(!val || isNaN(count) || count < 1) return; 
+
+          for(let i=1; i<=count; i++) {
+              const row = document.createElement('div');
+              row.className = 'group-member-row';
+              row.innerHTML = `
+                <div style="width:100%">
+                    <label style="font-size:0.85rem; color:#555;">Member ${i} Reg. No.</label>
+                    <input type="text" class="group-reg-input" required placeholder="e.g. 20203310${i>9?'':'0'}${i}">
+                </div>
+              `;
+              groupMembersContainer.appendChild(row);
+          }
+      }
+
+      // New Helper to Disable/Enable inputs
+      function toggleContainerInputs(container, enable) {
+          const inputs = container.querySelectorAll('input, select, textarea');
+          inputs.forEach(input => {
+              if (enable) input.removeAttribute('disabled');
+              else input.setAttribute('disabled', 'true');
+          });
+      }
+
+      function showGenerator(templateFile) {
         hideAllPages();
         form.reset();
         status.innerHTML = '';
         status.style.backgroundColor = '';
         
-        // Reset Teacher Logic
         teacherSourceSelected = false; 
         teacherDatalist.innerHTML = ''; 
         teacherSourceLabel.innerText = '(Select or Type)';
         
         hiddenTemplateDocxInput.value = templateFile;
 
-        labFields.classList.remove('visible');
-        assignmentFields.classList.remove('visible');
-
-        if (type === 'lab') {
+        // 1. Handle Lab vs Assignment containers
+        if (currentCategory === 'lab') {
           labFields.classList.add('visible');
-        } else if (type === 'assignment') {
+          assignmentFields.classList.remove('visible');
+          toggleContainerInputs(labFields, true);
+          toggleContainerInputs(assignmentFields, false); // Disable assignment inputs
+        } else {
+          labFields.classList.remove('visible');
           assignmentFields.classList.add('visible');
+          toggleContainerInputs(labFields, false); // Disable lab inputs
+          toggleContainerInputs(assignmentFields, true);
+        }
+
+        // 2. Handle Individual vs Group containers
+        if (currentSubmissionType === 'group') {
+            individualFields.classList.add('hidden');
+            groupFields.classList.remove('hidden');
+            
+            toggleContainerInputs(individualFields, false); // Disable Reg_No/Name
+            toggleContainerInputs(groupFields, true);       // Enable Group Fields
+            
+            memberCountInput.value = "2"; 
+            updateGroupInputs(); // Generate rows
+        } else {
+            groupFields.classList.add('hidden');
+            individualFields.classList.remove('hidden');
+            
+            toggleContainerInputs(groupFields, false);      // Disable Member Count
+            toggleContainerInputs(individualFields, true);  // Enable Reg_No/Name
+        }
+        
+        // 3. Handle Assignment Group No specifically
+        if (currentCategory === 'assignment' && currentSubmissionType === 'group') {
+            assignmentGroupInputDiv.classList.remove('hidden');
+            document.getElementById('Assignment_Group_No').removeAttribute('disabled');
+        } else {
+            assignmentGroupInputDiv.classList.add('hidden');
+            document.getElementById('Assignment_Group_No').setAttribute('disabled', 'true');
         }
 
         generatorPage.classList.remove('hidden');
         window.scrollTo(0, 0);
       }
 
-      // --- Event Listeners ---
-
       categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
-          const category = button.getAttribute('data-category');
-          showTemplateSelection(category);
+          currentCategory = button.getAttribute('data-category');
+          showSubmissionType();
         });
       });
 
-      templateButtons.forEach(button => {
+      submissionTypeButtons.forEach(button => {
           button.addEventListener('click', () => {
-              const type = button.getAttribute('data-type'); 
-              const file = button.getAttribute('data-file'); 
-              showGenerator(type, file);
+             currentSubmissionType = button.getAttribute('data-submission');
+             showTemplateSelection();
           });
       });
 
+      memberCountInput.addEventListener('input', updateGroupInputs);
+
       backLinks.forEach(link => {
           link.addEventListener('click', (e) => {
-              showLanding(); 
+              const target = link.getAttribute('data-target');
+              if(target === 'landing') showLanding();
+              else if(target === 'submissionType') showSubmissionType();
+              else if(target === 'templateSelection') showTemplateSelection();
           });
       });
       
-      // --- Teacher Modal Logic ---
-      
-      // 1. Trigger when user clicks the Course Teacher input
       courseTeacherInput.addEventListener('click', () => {
-         // If we haven't selected a source yet, trigger modal
          if (!teacherSourceSelected) {
-             courseTeacherInput.blur(); // Remove focus so they can't type yet
+             courseTeacherInput.blur();
              teacherModal.classList.add('active');
-             
-             // Reset Modal State
              initialModalBtns.classList.remove('hidden');
              otherDeptSelection.classList.add('hidden');
-             
-             // Populate dropdown in modal with departments if empty
              if (modalDeptSelect.options.length <= 1) {
                  const depts = document.querySelectorAll('#dept-list option');
                  depts.forEach(opt => {
@@ -644,7 +776,6 @@
          }
       });
       
-      // 2. Option: Same Department
       btnSameDept.addEventListener('click', () => {
           const myDept = studentDeptInput.value;
           if(!myDept) {
@@ -660,19 +791,16 @@
           courseTeacherInput.focus();
       });
       
-      // 3. Option: Other Department
       btnOtherDept.addEventListener('click', () => {
           initialModalBtns.classList.add('hidden');
           otherDeptSelection.classList.remove('hidden');
       });
       
-      // 4. Back button in Other Dept view
       btnBackToModal.addEventListener('click', () => {
           otherDeptSelection.classList.add('hidden');
           initialModalBtns.classList.remove('hidden');
       });
       
-      // 5. Confirm Other Department
       btnConfirmDept.addEventListener('click', () => {
           const selectedDept = modalDeptSelect.value;
           if(!selectedDept) {
@@ -686,81 +814,74 @@
           courseTeacherInput.focus();
       });
       
-      // Helper: Populate Datalist
       function populateTeachers(deptName) {
-          teacherDatalist.innerHTML = ''; // Clear previous
+          teacherDatalist.innerHTML = ''; 
           const teachers = allTeachersData[deptName];
-          
           if (teachers && teachers.length > 0) {
               teachers.forEach(name => {
                   const option = document.createElement('option');
                   option.value = name;
                   teacherDatalist.appendChild(option);
               });
-          } else {
-              // No teachers found for this dept in JSON
-              console.log('No teachers found for ' + deptName);
           }
       }
       
-      // Reset flag if user changes their own department? 
-      // Optional: keep it simple. If they change student dept, they might want to re-trigger logic.
       studentDeptInput.addEventListener('change', () => {
-          // If they haven't picked a teacher yet, reset logic
           if(courseTeacherInput.value === '') {
               teacherSourceSelected = false;
               teacherDatalist.innerHTML = '';
           }
       });
 
-
-      // --- Helper: Date Formatter ---
       const formatDateString = (dateStr) => {
         if (!dateStr) return "";
         const parts = dateStr.split("-");
         const year = parts[0];
         const monthIndex = parseInt(parts[1], 10) - 1; 
         const day = parseInt(parts[2], 10);
-
-        const months = [
-          "January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"
-        ];
-        
+        const months = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
         const getOrdinal = (n) => {
             if (n > 3 && n < 21) return 'th';
-            switch (n % 10) {
-                case 1:  return "st";
-                case 2:  return "nd";
-                case 3:  return "rd";
-                default: return "th";
-            }
+            switch (n % 10) { case 1: return "st"; case 2: return "nd"; case 3: return "rd"; default: return "th"; }
         };
-
         return `${day}${getOrdinal(day)} ${months[monthIndex]}, ${year}`;
       };
 
-      // --- Helper: Collect Form Data ---
       const getFormData = () => {
         const rawDate = document.getElementById('Submission_Date').value;
-        
-        return {
+        const baseData = {
           Dept_Name: document.getElementById('Dept_Name').value.trim(),
           Course_Code: document.getElementById('Course_Code').value.trim(),
           Course_Title: document.getElementById('Course_Title').value.trim(),
           Course_Teacher: document.getElementById('Course_Teacher').value.trim(),
           Course_Teacher_Details: document.getElementById('Course_Teacher_Details').value.trim(),
-          Reg_No: document.getElementById('Reg_No').value.trim(),
-          Name: document.getElementById('Name').value.trim(),
           Submission_Date: formatDateString(rawDate),
-          
-          // Lab Specific
           Exp_No: document.getElementById('Exp_No')?.value.trim() || '',
-          Group_No: document.getElementById('Group_No')?.value.trim() || '',
           Exp_Name: document.getElementById('Exp_Name')?.value.trim() || '',
-          // Assignment Specific
           Assignment_Name: document.getElementById('Assignment_Name')?.value.trim() || ''
         };
+        
+        const labGroup = document.getElementById('Group_No')?.value.trim();
+        const assignGroup = document.getElementById('Assignment_Group_No')?.value.trim();
+        baseData.Group_No = labGroup || assignGroup || '';
+
+        if (currentSubmissionType === 'individual') {
+            baseData.Name = document.getElementById('Name').value.trim();
+            baseData.Reg_No = document.getElementById('Reg_No').value.trim();
+        } else {
+            const regInputs = document.querySelectorAll('.group-reg-input');
+            let members = [];
+            regInputs.forEach((input) => {
+               if(input.value.trim()) {
+                   members.push(`Reg. No.: ${input.value.trim()}`);
+               }
+            });
+            baseData.Group_Members = members.join('\n');
+            baseData.Name = "";
+            baseData.Reg_No = "";
+        }
+        
+        return baseData;
       };
 
       const updateStatus = (message, type) => {
@@ -777,8 +898,22 @@
         }
       };
 
+      // Robust Style Cleaner to Fix "Stepping" Text
+      const cleanTemplateStyles = (zip) => {
+          try {
+             let xml = zip.file("word/document.xml").asText();
+             const pattern = /<w:p[\s\S]*?Group_Members[\s\S]*?<\/w:p>/g;
+             xml = xml.replace(pattern, (paragraphXml) => {
+                 let clean = paragraphXml.replace(/<w:ind\s+[^>]*\/>/g, "");
+                 clean = clean.replace(/<w:tabs>[\s\S]*?<\/w:tabs>/g, "");
+                 return clean;
+             });
+             zip.file("word/document.xml", xml);
+          } catch(e) {
+              console.warn("Could not auto-clean template styles:", e);
+          }
+      };
 
-      // --- DOCX Generation ---
       generateDocxButton.addEventListener('click', async (e) => {
         e.preventDefault(); 
         status.innerHTML = '<em>Generating DOCX cover page...</em>';
@@ -800,18 +935,24 @@
 
         try {
           const response = await fetch(templateDocxFile);
-          if (!response.ok) throw new Error('DOCX template file not found.');
+          if (!response.ok) throw new Error(`Template file ${templateDocxFile} not found.`);
           
           const content = await response.arrayBuffer();
           const zip = new PizZip(content);
+          
+          cleanTemplateStyles(zip);
+
           const doc = new docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
           doc.render(data);
 
           const blob = doc.getZip().generate({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-          const isLabReport = templateDocxFile.includes('lab');
-          const fileName = isLabReport
-            ? `Lab_Report_${data.Reg_No}_${data.Exp_Name || 'Experiment'}.docx`
-            : `Assignment_${data.Reg_No}_${data.Course_Code}.docx`;
+          
+          let fileName = "";
+          if (currentCategory === 'lab') {
+              fileName = `Lab_Report_${currentSubmissionType === 'group' ? 'Group' : data.Reg_No}_${data.Exp_Name || 'Exp'}.docx`;
+          } else {
+              fileName = `Assignment_${currentSubmissionType === 'group' ? 'Group' : data.Reg_No}_${data.Course_Code}.docx`;
+          }
 
           saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
 
@@ -819,8 +960,8 @@
 
           if (typeof gtag === 'function') {
             gtag('event', 'generate_cover_page', {
-              'document_type': isLabReport ? 'Lab Report (DOCX)' : 'Assignment (DOCX)',
-              'department': data.Dept_Name,
+              'document_type': currentCategory,
+              'submission_type': currentSubmissionType,
               'template': templateDocxFile
             });
           }
