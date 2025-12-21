@@ -315,7 +315,7 @@
                   <span>Single student submission.</span>
               </div>
               <div class="selection-box" data-submission="group">
-                  <h3>Group Wise Submission</h3>
+                  <h3>Group-Wise Submission</h3>
                   <span>For group projects/labs with multiple members.</span>
               </div>
           </div>
@@ -406,7 +406,6 @@
           
           <!-- INDIVIDUAL STUDENT INFO -->
           <div id="individual-fields" class="form-grid" style="grid-column: 1 / -1; display: contents;">
-             <!-- Added required to HTML so they work when enabled -->
              <div><label for="Reg_No">Registration No.</label><input type="text" id="Reg_No" required placeholder="e.g. 2020331024"></div>
              <div><label for="Name">Student Name</label><input type="text" id="Name" required placeholder="e.g. Mohammad"></div>
           </div>
@@ -668,7 +667,7 @@
           }
       }
 
-      // New Helper to Disable/Enable inputs
+      // Helper to Disable/Enable inputs to prevent validation errors on hidden fields
       function toggleContainerInputs(container, enable) {
           const inputs = container.querySelectorAll('input, select, textarea');
           inputs.forEach(input => {
@@ -694,11 +693,11 @@
           labFields.classList.add('visible');
           assignmentFields.classList.remove('visible');
           toggleContainerInputs(labFields, true);
-          toggleContainerInputs(assignmentFields, false); // Disable assignment inputs
+          toggleContainerInputs(assignmentFields, false); 
         } else {
           labFields.classList.remove('visible');
           assignmentFields.classList.add('visible');
-          toggleContainerInputs(labFields, false); // Disable lab inputs
+          toggleContainerInputs(labFields, false); 
           toggleContainerInputs(assignmentFields, true);
         }
 
@@ -898,7 +897,7 @@
         }
       };
 
-      // Robust Style Cleaner to Fix "Stepping" Text
+      // Robust Style Cleaner to Fix "Stepping" Text in Centered Templates
       const cleanTemplateStyles = (zip) => {
           try {
              let xml = zip.file("word/document.xml").asText();
@@ -963,7 +962,7 @@
               'document_type': currentCategory,
               'submission_type': currentSubmissionType,
               'template': templateDocxFile,
-              'department': data.Dept_Name // Include Department in Analytics
+              'department': data.Dept_Name 
             });
           }
 
