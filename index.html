@@ -629,6 +629,48 @@
           }
       };
 
+      // Remember student info (Department, Name, Reg No) between visits
+      const STUDENT_INFO_KEY = 'sustCoverStudentInfo';
+      const STUDENT_INFO_FIELDS = ['Dept_Name', 'Name', 'Reg_No'];
+
+      const loadStudentInfo = () => {
+          try {
+              const saved = JSON.parse(localStorage.getItem(STUDENT_INFO_KEY));
+              return (saved && typeof saved === 'object') ? saved : {};
+          } catch (e) {
+              return {};
+          }
+      };
+
+      const saveStudentInfo = (info) => {
+          try {
+              localStorage.setItem(STUDENT_INFO_KEY, JSON.stringify(Object.assign(loadStudentInfo(), info)));
+          } catch (e) {
+              // Storage unavailable (e.g. private mode) - silently ignore
+          }
+      };
+
+      const restoreStudentInfo = () => {
+          const saved = loadStudentInfo();
+          STUDENT_INFO_FIELDS.forEach(id => {
+              if (typeof saved[id] === 'string') document.getElementById(id).value = saved[id];
+          });
+      };
+
+      STUDENT_INFO_FIELDS.forEach(id => {
+          document.getElementById(id).addEventListener('change', (e) => {
+              saveStudentInfo({ [id]: e.target.value.trim() });
+          });
+      });
+
+      // Today's date in local time as YYYY-MM-DD (for the date input)
+      const getTodayDateValue = () => {
+          const now = new Date();
+          const mm = String(now.getMonth() + 1).padStart(2, '0');
+          const dd = String(now.getDate()).padStart(2, '0');
+          return `${now.getFullYear()}-${mm}-${dd}`;
+      };
+
       fetch('./data/teachers.json')
         .then(response => response.json())
         .then(data => { allTeachersData = data; })
@@ -669,7 +711,7 @@
                   `;
                   
                   div.addEventListener('click', () => {
-                      showGenerator(tpl.file);
+                      navigate({ page: 'generator', category: currentCategory, submission: currentSubmissionType, template: tpl.file });
                   });
                   templateGrid.appendChild(div);
               });
@@ -719,6 +761,8 @@
       function showGenerator(templateFile) {
         hideAllPages();
         form.reset();
+        restoreStudentInfo();
+        document.getElementById('Submission_Date').value = getTodayDateValue();
         status.innerHTML = '';
         status.style.backgroundColor = '';
         
@@ -772,17 +816,50 @@
         window.scrollTo(0, 0);
       }
 
+      // === Navigation with browser/phone Back button support ===
+      // Each step is stored in history (same URL), so Back returns to the previous step.
+      function isValidState(state) {
+          if (!state || typeof state !== 'object') return false;
+          if (state.page === 'landing') return true;
+          if (!['lab', 'assignment'].includes(state.category)) return false;
+          if (state.page === 'submissionType') return true;
+          if (!['individual', 'group'].includes(state.submission)) return false;
+          if (state.page === 'templateSelection') return true;
+          if (state.page === 'generator') {
+              return templateData[state.category][state.submission].some(tpl => tpl.file === state.template);
+          }
+          return false;
+      }
+
+      function renderState(state) {
+          teacherModal.classList.remove('active');
+          if (state.category) currentCategory = state.category;
+          if (state.submission) currentSubmissionType = state.submission;
+
+          if (state.page === 'submissionType') showSubmissionType();
+          else if (state.page === 'templateSelection') showTemplateSelection();
+          else if (state.page === 'generator') showGenerator(state.template);
+          else showLanding();
+      }
+
+      function navigate(state) {
+          renderState(state);
+          history.pushState(state, '');
+      }
+
+      window.addEventListener('popstate', (e) => {
+          renderState(isValidState(e.state) ? e.state : { page: 'landing' });
+      });
+
       categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
-          currentCategory = button.getAttribute('data-category');
-          showSubmissionType();
+          navigate({ page: 'submissionType', category: button.getAttribute('data-category') });
         });
       });
 
       submissionTypeButtons.forEach(button => {
           button.addEventListener('click', () => {
-             currentSubmissionType = button.getAttribute('data-submission');
-             showTemplateSelection();
+             navigate({ page: 'templateSelection', category: currentCategory, submission: button.getAttribute('data-submission') });
           });
       });
 
@@ -790,10 +867,14 @@
 
       backLinks.forEach(link => {
           link.addEventListener('click', (e) => {
-              const target = link.getAttribute('data-target');
-              if(target === 'landing') showLanding();
-              else if(target === 'submissionType') showSubmissionType();
-              else if(target === 'templateSelection') showTemplateSelection();
+              e.preventDefault();
+              if (isValidState(history.state) && history.state.page !== 'landing') {
+                  // Same as pressing the browser Back button
+                  history.back();
+              } else {
+                  const target = link.getAttribute('data-target');
+                  renderState({ page: target, category: currentCategory, submission: currentSubmissionType });
+              }
           });
       });
       
@@ -995,6 +1076,12 @@
 
           saveAs(blob, fileName.replace(/[^a-zA-Z0-9_-]/g, '_'));
 
+          if (currentSubmissionType === 'individual') {
+              saveStudentInfo({ Dept_Name: data.Dept_Name, Name: data.Name, Reg_No: data.Reg_No });
+          } else {
+              saveStudentInfo({ Dept_Name: data.Dept_Name });
+          }
+
           updateStatus('DOCX cover page generated & downloaded successfully!', 'success');
 
           if (typeof gtag === 'function') {
@@ -1011,6 +1098,11 @@
           updateStatus('Error generating DOCX: ' + err.message, 'error');
         }
       });
+
+      // Initial page: restore the current step after a refresh, otherwise start at home
+      const initialState = isValidState(history.state) ? history.state : { page: 'landing' };
+      history.replaceState(initialState, '');
+      renderState(initialState);
 
     });
   </script>
